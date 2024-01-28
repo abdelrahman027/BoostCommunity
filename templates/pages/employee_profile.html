@@ -1,0 +1,159 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-img-container {
+            text-align: center;
+        }
+
+        .profile-img {
+            border-radius: 50%;
+            border: 5px solid #007bff;
+            max-width: 150px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-title {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .card-text {
+            color: #555;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        img.img-fluid {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .deliverable-form {
+            margin-top: 20px;
+        }
+    </style>
+    <title>Employee Profile</title>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- Employee Photo and Details Card -->
+            <div class="card mb-4">
+                <div class="card-body text-center">
+                    <div class="profile-img-container">
+                        {% if employee.EmployeePhoto %}
+                            <div class="profile-img">
+                                <img src="{{ employee.EmployeePhoto.url }}" alt="{{ employee.FirstName }} {{ employee.LastName }}">
+                            </div>
+                        {% else %}
+                            <p>No photo available</p>
+                        {% endif %}
+                    </div>
+
+                    <h5 class="card-title">{{ employee.FirstName }} {{ employee.LastName }}</h5>
+                    <p class="card-text">Email: {{ employee.Email }}</p>
+                </div>
+            </div>
+
+            <!-- Employee Tasks Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Employee Tasks</h5>
+                    <ul>
+                        {% for task in tasks %}
+                            <li>
+                                {{ task.TaskName }} - {{ task.Description }} - {{ task.Deadline }}
+                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#deliverableModal{{ task.id }}">Add Deliverable</button>
+                            </li>
+                            <!-- Deliverable Modal -->
+                            <div class="modal fade" id="deliverableModal{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="deliverableModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deliverableModalLabel">Add Deliverable</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="post" enctype="multipart/form-data" class="deliverable-form">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="task_id" value="{{ task.id }}">
+                                                {{ deliverable_form.as_p }}
+                                                <button type="submit" class="btn btn-primary">Add Deliverable</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Total Current Month Points Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Total Current Month Points</h5>
+                    <p class="card-text">
+                        {% if current_month_performance %}
+                            {{ current_month_performance.TotalPoints }}
+                        {% else %}
+                            No data available
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Employee Badges Card -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Employee Badges</h5>
+                    {% for badge in badges %}
+                        <img src="{{ badge.Badge.BadgeImage.url }}" alt="{{ badge.Badge.BadgeName }}" class="img-fluid">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

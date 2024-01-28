@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'boot/css/bootstrap.min.css' %}">
+    <script src="{% static 'boot/js/bootstrap.bundle.min.js' %}"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Style for the background video */
+        #background-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        /* Style for the login form */
+        .login-form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        /* Style for the company logo */
+        #company-logo {
+            background-color: #12111f;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        /* Style for the register button */
+        .register-button {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background video -->
+    <video id="background-video" autoplay muted loop>
+        <source src="{% static 'image/video1.mp4' %}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Login form -->
+    <div class="login-form">
+        <!-- Company logo -->
+        <div id="company-logo">
+            <img src="{% static 'image/Logo.png' %}" alt="Company Logo" width="200">
+        </div>
+
+        <h2>Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Login</button>
+        </form>
+
+        <!-- Register button -->
+        <a href="{% url 'register' %}" class="btn btn-secondary btn-block register-button">Register</a>
+    </div>
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

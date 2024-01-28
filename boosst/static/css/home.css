@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900');
+*
+{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 100vh;
+    background: #12111f;
+
+}
+.box
+{
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px;
+    background: #12111f;
+    transition: 0.5s;
+}
+.box:hover
+{
+    height: 400px;
+}
+.box.imgBx
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+.box .imgBx img
+{
+    max-width: 100%;
+    opacity: 0.1;
+    transition: 0.5s;
+}
+.box:hover .imgBx img
+{
+    opacity: 1;
+}
+.box:before
+{
+    content:'';
+    position:absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: #fff;
+    z-index: -1;
+}
+.box:after
+{
+    content:'';
+    position:absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: #fff;
+    z-index: -2;
+    filter: blur(40px);
+}
+.box:before,
+.box:after
+{
+    background: linear-gradient(253deg,#4f95ff,#12111f,#4f95ff);
+}
+.box:nth-child(2):before,
+.box:nth-child(2):after
+{
+    background: linear-gradient(253deg,#4f95ff,#12111f,#4f95ff);
+}
+.box:nth-child(3):before,
+.box:nth-child(3):after
+{
+    background: linear-gradient(253deg,#4f95ff,#12111f,#4f95ff);
+}
+.box .content
+{
+    position: absolute;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    height: 70px;
+    background: rgba(5, 145, 252, 0.781);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.5s;
+}
+.box:hover .content
+{
+    opacity: 1;
+}
+.box .content h2 span
+{
+    font-size: 14px;
+    color: rgb(0, 0, 0);
+    font-weight: 200;
+    letter-spacing: 2px;
+}
+
+.calendar {
+    width: 98%;
+    margin: auto;
+    font-size: 13px;
+  }
+  
+  .calendar tr, .calendar td {
+    border: 1px solid black;
+  }
+  
+  .calendar th {
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+  }
+  
+  .calendar td {
+    width: 200px;
+    height: 150px;
+    padding: 20px 0px 0px 5px;
+  }
+  
+  .month {
+    font-size: 25px;
+  }
+  
+  .date {
+    font-size: 16px;
+  }
+  
+  ul {
+    height: 100%;
+    padding: 0px 5px 0px 20px;
+  }
+  
+  a {
+    color: #17a2b8;
+  }

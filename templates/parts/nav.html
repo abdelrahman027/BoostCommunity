@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content=
+        "width=device-width, initial-scale=1.0">
+          
+    <style>
+        #navbar {
+            width: 100vw;
+            height: 120px;
+            border: 3px solid #12111f;
+            border-radius: 15px;
+            background-color: #12111f;
+        }
+  
+        #navbar img {
+            display: block;
+            width: 200px;
+            height: 100px;
+            margin: 0 auto;
+  
+        }
+    </style>
+</head>
+  
+<body>
+    <nav id="navbar">
+        <img src="{% static 'image/Logo.png'%}" alt="Logo image">
+    </nav>
+</body>
