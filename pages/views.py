@@ -44,7 +44,7 @@ def register_user(request):
             user = form.save()
             # Print registered user
             print(user)
-            print(form.changed_data)
+            print(form.cleaned_data)
             # Create an associated Employee object for the user
 
             Employee.objects.create(
