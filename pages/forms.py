@@ -2,10 +2,15 @@
 from django import forms
 from .models import TaskDeliverable
 
+from django.forms import ModelForm
+from .models import Task
+
+
 class TaskDeliverableForm(forms.ModelForm):
     class Meta:
         model = TaskDeliverable
-        fields = ['DeliverableName', 'DeliverableDescription', 'DeliverableFile', 'Task']
+        fields = ['DeliverableName', 'DeliverableDescription',
+                  'DeliverableFile', 'Task']
 
     def __init__(self, *args, **kwargs):
         # Pop 'task_id' from kwargs and set it as an instance variable
@@ -26,3 +31,18 @@ class TaskDeliverableForm(forms.ModelForm):
         if self.task_id and not task_id:
             raise forms.ValidationError("Task is required.")
         return task_id
+
+
+class TasksForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['TaskName', 'Employee',
+                  'Deadline',]
+
+    # TaskID = models.AutoField(primary_key=True)
+    # Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    # TaskName = models.CharField(max_length=255)
+    # Description = models.TextField()
+    # Deadline = models.DateField()
+    # TaskDuration = models.IntegerField()
+    # TaskPriority = models.CharField(max_length=10)

@@ -1,0 +1,53 @@
+{% load static %}
+<div id="side_nav" class="col-2 p-0 sidebar_container hide">
+    <div class="sidebar position-relative">
+        <ul>
+            <li class="active">
+                <a href="index.html">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/home.svg' %}" alt="icon">
+                    <span>home</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/my_tasks.svg' %}"
+                        alt="icon">
+                    <span>my tasks</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/inbox.svg' %}" alt="icon">
+                    <span>inbox</span>
+                </a>
+            </li>
+        </ul>
+        <hr class="border border-secondary border-1 opacity-50">
+        <ul>
+            <li class="title">
+                <div>organization</div>
+            </li>
+            <li>
+                <a href="reporting.html">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/reporting.svg' %}"
+                        alt="icon">
+                    <span>reporting</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'trainers' %}">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/trainers.svg' %}"
+                        alt="icon">
+                    <span>trainers</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'courses' %}">
+                    <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/courses.svg' %}" alt="icon">
+                    <span>courses</span>
+                </a>
+            </li>
+        </ul>
+        <img src="{% static 'front-end-static/images/boost_logo.png' %}" class="logo" alt="logo">
+    </div>
+</div>

@@ -1,159 +1,182 @@
+{% extends 'base_custom.html' %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
 
-        .container {
-            margin-top: 50px;
-        }
+{% block style %}
+<link rel="stylesheet" href="{% static 'front-end-static/css/bootstrap.min.css' %}">
+<!-- <link rel="stylesheet" href="./css/style.min.css"> -->
+<link rel="stylesheet" href="{% static 'front-end-static/css/style.min.css' %}">
+{% endblock style %}
 
-        .card {
-            border: none;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
 
-        .profile-img-container {
-            text-align: center;
-        }
+{% block title %}
+Employee Profile
+{% endblock title %}
 
-        .profile-img {
-            border-radius: 50%;
-            border: 5px solid #007bff;
-            max-width: 150px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
 
-        .profile-img img {
-            width: 100%;
-            height: auto;
-        }
 
-        .card-title {
-            color: #007bff;
-            font-weight: bold;
-        }
+{% block content %}
 
-        .card-text {
-            color: #555;
-        }
 
-        ul {
-            list-style: none;
-            padding: 0;
-        }
 
-        ul li {
-            margin-bottom: 10px;
-        }
-
-        img.img-fluid {
-            max-width: 100%;
-            height: auto;
-        }
-
-        .deliverable-form {
-            margin-top: 20px;
-        }
-    </style>
-    <title>Employee Profile</title>
-</head>
-<body>
-
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <!-- Employee Photo and Details Card -->
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <div class="profile-img-container">
-                        {% if employee.EmployeePhoto %}
-                            <div class="profile-img">
-                                <img src="{{ employee.EmployeePhoto.url }}" alt="{{ employee.FirstName }} {{ employee.LastName }}">
-                            </div>
-                        {% else %}
-                            <p>No photo available</p>
-                        {% endif %}
+<div id="loading_container" class="loading_container d-flex align-items-center justify-content-center">
+    <span class="loader"></span>
+</div>
+{% include 'parts/navbar.html' %}
+<div class="row m-0">
+    <!-- Add hide class to side_content   -->
+    {% include 'parts/side_nav.html' %}
+    <div class="col-9 site_content offset_left" id="side_content">
+        <div class="container">
+            <h3 class="text-capitalize my-1">home</h3>
+            <div class="text-center">
+                <p>{% now "jS F Y" %}</p>
+                <h2 class="my-4">Good evening , {{ employee.FirstName }} {{ employee.LastName }}</h2>
+                <h4 class="fw-normal">Your achievement</h4>
+            </div>
+            <div class="d-flex justify-content-center gap-2">
+                <div class="employee_badge creative_badge p-3">
+                    <img src="{% static 'front-end-static/images/icons/home/creative.svg' %}" class="w-50" alt="icon">
+                    <div>Creative of the month</div>
+                </div>
+                <div class="employee_badge achieve_badge p-3">
+                    <img src="{% static 'front-end-static/images/icons/home/achiever.svg' %}" class="w-50" alt="icon">
+                    <div>Creative of the month</div>
+                </div>
+                <div class="employee_badge employee_of_month_badge p-3">
+                    <img src="{% static 'front-end-static/images/icons/home/employee.svg' %}" class="w-50" alt="icon">
+                    <div>Creative of the month</div>
+                </div>
+                <div class="employee_badge creative_badge2 p-3">
+                    <img src="{% static 'front-end-static/images/icons/home/creative2.svg' %}" class="w-50" alt="icon">
+                    <div>Creative of the month</div>
+                </div>
+            </div>
+            <ul class="calculations d-flex w-lg-75 w-sm-100 justify-content-around rounded-pill">
+                <li>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            This week
+                            <img src="{% static 'front-end-static/images/icons/arrow_down.svg' %}" alt="icon">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
                     </div>
+                </li>
+                <li class="d-flex align-items-center">
+                    <span>3</span>
+                    <span class="description">Overdue</span>
+                </li>
+                <li class="d-flex align-items-center">
+                    <span>5</span>
+                    <span class="description">Unfinished tasks</span>
+                </li>
+                <li class="d-flex align-items-center">
+                    <span>6</span>
+                    <span class="description">Tasks completed</span>
+                </li>
+            </ul>
+            <div class="tasks rounded p-2">
+                <div class="header d-flex justify-content-between align-items-center">
+                    <div class="left d-flex align-items-center">
 
-                    <h5 class="card-title">{{ employee.FirstName }} {{ employee.LastName }}</h5>
-                    <p class="card-text">Email: {{ employee.Email }}</p>
-                </div>
-            </div>
-
-            <!-- Employee Tasks Card -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Employee Tasks</h5>
-                    <ul>
-                        {% for task in tasks %}
-                            <li>
-                                {{ task.TaskName }} - {{ task.Description }} - {{ task.Deadline }}
-                                <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#deliverableModal{{ task.id }}">Add Deliverable</button>
-                            </li>
-                            <!-- Deliverable Modal -->
-                            <div class="modal fade" id="deliverableModal{{ task.id }}" tabindex="-1" role="dialog" aria-labelledby="deliverableModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deliverableModalLabel">Add Deliverable</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form method="post" enctype="multipart/form-data" class="deliverable-form">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="task_id" value="{{ task.id }}">
-                                                {{ deliverable_form.as_p }}
-                                                <button type="submit" class="btn btn-primary">Add Deliverable</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Total Current Month Points Card -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Total Current Month Points</h5>
-                    <p class="card-text">
-                        {% if current_month_performance %}
-                            {{ current_month_performance.TotalPoints }}
-                        {% else %}
-                            No data available
+                        {% if employee.EmployeePhoto.url %}
+                        <img src="{{ employee.EmployeePhoto.url }}" class="rounded-circle" alt="User">
                         {% endif %}
-                    </p>
-                </div>
-            </div>
 
-            <!-- Employee Badges Card -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Employee Badges</h5>
-                    {% for badge in badges %}
-                        <img src="{{ badge.Badge.BadgeImage.url }}" alt="{{ badge.Badge.BadgeName }}" class="img-fluid">
-                    {% endfor %}
+
+                        <h6>My tasks</h6>
+                    </div>
+                    <div
+                        class="total_finished_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                        <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}" alt="icon">
+                        <span>14/18</span>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                            data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane"
+                            aria-selected="true">Home</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                            data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane"
+                            aria-selected="false">Profile</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                            data-bs-target="#contact-tab-pane" type="button" role="tab" aria-controls="contact-tab-pane"
+                            aria-selected="false">Contact</button>
+                    </li>
+                </ul>
+                <div class="tab-content tasks_tabs" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab"
+                        tabindex="0">
+                        <div class="position-relative input_container">
+                            <!-- {{task_form.TaskName}} -->
+                            <!-- <input type="text" class="form-control task_input" placeholder="Enter task"> -->
+                            <form style="display: flex; align-items: center;" action="" method="POST">
+                                {% csrf_token %}
+                                <button style="outline: none; border: none;" type="submit">
+                                    <img src="{% static 'front-end-static/images/icons/home/plus.svg' %}"
+                                        class="position-absolute top-50 start-0 z-1" alt="Plus">
+                                </button>
+                                <div class="task_input from-control">
+                                    {{task_form.TaskName}}
+                                    {{task_form.Employee}}
+                                    {{task_form.Deadline}}
+                                </div>
+                            </form>
+                        </div>
+                        <ul class="list-group list-group-flush tasks_list">
+
+                            {% for task in tasks %}
+
+                            <li class="list-group-item d-flex justify-content-between">
+                                <div>
+                                    <img src="{% static 'front-end-static/images/icons/home/check_mark.svg' %}"
+                                        class="icon" alt="icon">
+                                    {{task.TaskName}}
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div
+                                        class="finished_tasks_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                        <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}"
+                                            alt="icon">
+                                        <span>14/18</span>
+                                    </div>
+                                    <span class="badge bg-secondary mx-2">New</span>
+                                    <span>{{task.Deadline|date:"d/m"}} </span>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
+                        tabindex="0">
+                        Two
+                    </div>
+                    <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
+                        tabindex="0">
+                        Three
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS and jQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    window.onload = function ()
+    {
+        loadingContainer.classList.add('hide')
+        document.body.classList.add("loaded")
+    }
+</script>
 
-</body>
-</html>
+
+{% endblock content %}

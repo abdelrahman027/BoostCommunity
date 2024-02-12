@@ -1,0 +1,5 @@
+django-admin-interface==0.28.5
+django-colorfield==0.11.0
+pillow==10.2.0
+python-slugify==8.0.3
+text-unidecode==1.3

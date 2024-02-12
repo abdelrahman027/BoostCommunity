@@ -1,0 +1,44 @@
+{% load static %}
+
+<nav class="navbar site_nav">
+    <div class="d-flex justify-content-between w-100 mx-4 align-items-center">
+        <div class="d-flex left align-items-center">
+            <div id="toggler" class="d-flex align-items-center">
+                <img src="{% static 'front-end-static/images/icons/nav_btn.svg' %}" class="toggle_icon" alt="nav btn">
+                <img src="{% static 'front-end-static/images/icons/close_btn.svg' %}" class="toggle_icon hidden_icon"
+                    alt="plus icon">
+            </div>
+            <button type="button" class="btn btn-info text-white">
+                <img src="{% static 'front-end-static/images/icons/plus.svg' %}" class="icon" alt="plus icon">
+                <span>Create</span>
+            </button>
+        </div>
+        <div class="search_container">
+            <input type="text" class="form-control" placeholder="Search...">
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="btn ai_btn">
+                <img src="{% static 'front-end-static/images/icons/fox.svg' %}" class="icon" alt="Ai icon">
+                <span>AI Wizard</span>
+            </div>
+            <div class="dropdown d-flex">
+                <button class="border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                    {% if employee.EmployeePhoto.url %}
+                    <img style="width: 50px;height: 50px;" src="{{ employee.EmployeePhoto.url }}" class="rounded-circle"
+                        alt="user">
+                    {% endif %}
+
+
+                    <img src="{% static 'front-end-static/images/icons/arrow_down_light.svg' %}" class="icon"
+                        alt="icon">
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
