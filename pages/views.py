@@ -153,6 +153,18 @@ def trainer(request):
     return render(request, 'pages/trainers.html', context)
 
 
+def employee(request):
+    employee_list = Employee.objects.all()
+    employee = get_object_or_404(Employee, user=request.user)
+
+    context = {
+        'employees': employee_list,
+        'employee': employee,
+    }
+
+    return render(request, 'pages/employees.html', context)
+
+
 def course(request):
     courses_list = Course.objects.all()
     employee = get_object_or_404(Employee, user=request.user)

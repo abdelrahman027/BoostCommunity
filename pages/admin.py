@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable
+from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client
+
 from django.http import HttpResponse
 from import_export.admin import ImportExportModelAdmin
 from django.utils.html import format_html
@@ -210,6 +211,15 @@ class TaskDeliverableAdmin(ImportExportModelAdmin, ExportExcelMixin, ExportWordM
     actions = ['export_as_excel', 'export_as_word']
 
 
+class ClientAdmin(ImportExportModelAdmin, ExportExcelMixin, ExportWordMixin):
+    list_display = ('ClientID', 'Location', 'Project',
+                    'Phone', 'FirstName', 'LastName',)
+    search_fields = ['FirstName', 'LastName', 'Project', 'Phone', 'Phone']
+    list_filter = ['Project', 'Location',]
+    list_editable = ['Project', 'Phone',]
+    list_display_links = ['FirstName', 'LastName']
+
+
 # Register your models with the customized admin classes
 admin.site.register(EmployeeBadge, EmployeeBadgeAdmin)
 admin.site.register(Meeting, MeetingAdmin)
@@ -229,5 +239,6 @@ admin.site.register(Task, TaskAdmin)
 admin.site.register(TaskProgress, TaskProgressAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Badge, BadgeAdmin)
+admin.site.register(Client, ClientAdmin)
 admin.site.site_header = "Boost Community"
 admin.site.site_title = "Boost Community"

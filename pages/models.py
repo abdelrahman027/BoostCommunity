@@ -39,6 +39,8 @@ class Employee(models.Model):
         User, on_delete=models.CASCADE, null=True, default=None)
     EmployeePhoto = models.ImageField(
         upload_to='employee_photos/', default='employee_photos/default-employee.webp', null=True, blank=True)
+    Location = models.CharField(max_length=50, null=True)
+    PerHour = models.CharField(max_length=10, null=True)
 
     def __str__(self):
         return self.FirstName
@@ -220,3 +222,16 @@ class TaskDeliverable(models.Model):
 
     def __str__(self):
         return self.DeliverableName
+
+
+class Client(models.Model):
+    ClientID = models.AutoField(primary_key=True)
+    FirstName = models.CharField(max_length=255)
+    LastName = models.CharField(max_length=255)
+    Phone = models.CharField(max_length=20)
+    Company = models.CharField(max_length=20)
+    Project = models.CharField(max_length=20)
+    Location = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.FirstName

@@ -34,14 +34,20 @@
                     <span>reporting</span>
                 </a>
             </li>
-            <li>
+            <li class="{% if trainers %}
+            active
+        {% endif %}">
                 <a href="{% url 'trainers' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/trainers.svg' %}"
                         alt="icon">
                     <span>trainers</span>
                 </a>
             </li>
-            <li>
+            <li class="
+            {% if courses %}
+                active
+            {% endif %}
+                ">
                 <a href="{% url 'courses' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/courses.svg' %}" alt="icon">
                     <span>courses</span>
@@ -50,8 +56,10 @@
         </ul>
         <hr class="border border-secondary border-1 opacity-50">
         <ul>
-            <li class="">
-                <a href="employees.html">
+            <li class="{% if employees %}
+            active
+        {% endif %}">
+                <a href="{% url 'employees' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/employees.svg' %}"
                         alt="icon">
                     <span>Employees</span>
