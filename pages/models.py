@@ -60,7 +60,7 @@ class Task(models.Model):
     Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     TaskName = models.CharField(max_length=255)
     Description = models.TextField(default="default description", null=True)
-    Deadline = models.DateField()
+    Deadline = models.DateField(default=datetime.today(), null=True)
     TaskDuration = models.IntegerField(default=1, null=True)
     TaskPriority = models.CharField(max_length=10, default='normal', null=True)
 

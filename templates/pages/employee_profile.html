@@ -30,7 +30,7 @@ Employee Profile
             <h3 class="text-capitalize my-1">home</h3>
             <div class="text-center">
                 <p>{% now "jS F Y" %}</p>
-                <h2 class="my-4">Good evening , {{ employee.FirstName }} {{ employee.LastName }}</h2>
+                <h2 class="my-4">Good evening , {{ employee.FirstName|title }} {{ employee.LastName|title}}</h2>
                 <h4 class="fw-normal">Your achievement</h4>
             </div>
             <div class="d-flex justify-content-center gap-2">
@@ -93,7 +93,7 @@ Employee Profile
                     <div
                         class="total_finished_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
                         <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}" alt="icon">
-                        <span>14/18</span>
+                        <span>0/{{tasks.count}}</span>
                     </div>
                 </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -126,9 +126,11 @@ Employee Profile
                                         class="position-absolute top-50 start-0 z-1" alt="Plus">
                                 </button>
                                 <div class="task_input from-control">
-                                    {{task_form.TaskName}}
-                                    {{task_form.Employee}}
-                                    {{task_form.Deadline}}
+
+                                    <input type="text" class="form-control task_input" name="TaskName"
+                                        placeholder="Enter task">
+                                    <input type="text" class="form-control task_input" placeholder="Enter task"
+                                        value=" {{employee}}" hidden>
                                 </div>
                             </form>
                         </div>
@@ -136,6 +138,8 @@ Employee Profile
 
                             {% for task in tasks %}
 
+
+                            <!-- Other task name -->
                             <li class="list-group-item d-flex justify-content-between">
                                 <div>
                                     <img src="{% static 'front-end-static/images/icons/home/check_mark.svg' %}"
@@ -144,13 +148,13 @@ Employee Profile
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div
-                                        class="finished_tasks_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                        class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
                                         <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}"
                                             alt="icon">
-                                        <span>14/18</span>
+                                        <span>0/{{tasks.count}}</span>
                                     </div>
                                     <span class="badge bg-secondary mx-2">New</span>
-                                    <span>{{task.Deadline|date:"d/m"}} </span>
+                                    <span>{{task.Deadline|date:"d/m"}}</span>
                                 </div>
                             </li>
                             {% endfor %}

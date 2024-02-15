@@ -7,13 +7,12 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import random
 from .forms import TaskDeliverableForm
-from .forms import TasksForm
 from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.utils import timezone
 # Create your views here.
 
@@ -31,6 +30,34 @@ def login_user(request):
             messages.error(request, 'Invalid username or password')
 
     return render(request, 'pages/login.html')
+
+# Multi form register///////////////////
+
+# step1 email,username
+
+
+def register_username_email(request):
+    if request.method == 'POST':
+        entered_username = request.POST['username']
+        entered_email = request.POST['email']
+        request.session["username"] = entered_username
+        request.session["email"] = entered_email
+        return redirect('register-password')
+    return render(request, 'pages/register-email-username.html')
+
+# step2 password ,confirm password
+
+
+def register_password(request):
+    if request.method == 'POST':
+        entered_password1 = request.POST['password1']
+        entered_password2 = request.POST['password2']
+        request.session["password1"] = entered_password1
+        request.session["password2"] = entered_password2
+        return redirect('register')
+    return render(request, 'pages/register-password.html')
+
+# Multi form register////////////////////
 
 
 def register_user(request):
@@ -56,8 +83,14 @@ def register_user(request):
             return redirect('login')
     else:
         form = UserCreationForm()
-
-    return render(request, 'pages/sign_up.html', {'form': form})
+    context = {
+        'form': form,
+        "username": request.session['username'],
+        "password1": request.session['password1'],
+        "password2": request.session['password2'],
+        "email": request.session['email'],
+    }
+    return render(request, 'pages/sign_up.html', context)
 
 
 def index(request):
@@ -121,13 +154,11 @@ def employee_profile(request):
     else:
         deliverable_form = TaskDeliverableForm()
 
-    tasks_form = TasksForm()
     if request.method == 'POST':
-        tasks_form = TasksForm(request.POST)
-        print(request.POST)
-        if tasks_form.is_valid():
-            tasks_form.save()
-            return redirect('employee_profile')
+        taskname = request.POST.get('TaskName', False)
+        Task.objects.create(TaskName=taskname, Employee=employee)
+        print(employee)
+        return redirect('employee_profile')
 
     context = {
         'employee': employee,
@@ -135,15 +166,21 @@ def employee_profile(request):
         'deliverable_form': deliverable_form,
         'current_month_performance': current_month_performance,
         'badges': badges,
-        'task_form': tasks_form,
     }
 
     return render(request, 'pages/employee_profile.html', context)
 
 
 def trainer(request):
-    trainers_list = Trainer.objects.all()
+
     employee = get_object_or_404(Employee, user=request.user)
+    if 'q' in request.GET:
+        q = request.GET['q']
+        trainers_list = Trainer.objects.filter(
+            Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+        print(q)
+    else:
+        trainers_list = Trainer.objects.all()
 
     context = {
         'trainers': trainers_list,
@@ -154,8 +191,15 @@ def trainer(request):
 
 
 def employee(request):
-    employee_list = Employee.objects.all()
     employee = get_object_or_404(Employee, user=request.user)
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        employee_list = Employee.objects.filter(
+            Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+        print(q)
+    else:
+        employee_list = Employee.objects.all()
 
     context = {
         'employees': employee_list,
@@ -166,8 +210,14 @@ def employee(request):
 
 
 def course(request):
-    courses_list = Course.objects.all()
     employee = get_object_or_404(Employee, user=request.user)
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        courses_list = Course.objects.filter(CourseName__icontains=q)
+        print(q)
+    else:
+        courses_list = Course.objects.all()
 
     context = {
         'courses': courses_list,
@@ -195,3 +245,21 @@ def assign_deliverable(request, task_id):
         task.save()
 
     return redirect('employee_profile')
+
+
+def reporting(request):
+    employee = get_object_or_404(Employee, user=request.user)
+
+    context = {
+        'employee': employee,
+    }
+    return render(request, 'pages/reporting.html', context)
+
+
+def employees_tracking(request):
+    employee = get_object_or_404(Employee, user=request.user)
+
+    context = {
+        'employee': employee,
+    }
+    return render(request, 'pages/task_tracking.html', context)

@@ -3,7 +3,7 @@
     <div class="sidebar position-relative">
         <ul>
             <li class="active">
-                <a href="index.html">
+                <a href="{% url 'employee_profile' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/home.svg' %}" alt="icon">
                     <span>home</span>
                 </a>
@@ -28,7 +28,7 @@
                 <div>organization</div>
             </li>
             <li>
-                <a href="reporting.html">
+                <a href="{% url 'reporting' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/reporting.svg' %}"
                         alt="icon">
                     <span>reporting</span>

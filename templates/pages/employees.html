@@ -35,7 +35,8 @@ Employees|Page
                     <img src="{% static 'front-end-static/images/icons/search.svg' %}" class="icon" alt="icon">
                 </div>
                 <div class="right d-flex">
-                    <a href="./task_tracking.html" class="btn d-flex align-items-center text-white tracking_mode">
+                    <a href="{% url 'employees-tracking' %}"
+                        class="btn d-flex align-items-center text-white tracking_mode">
                         <span>Tracking Mode</span>
                         <img src="{% static 'front-end-static/images/icons/table/eye.svg' %}" class="icon" alt="icon">
                     </a>

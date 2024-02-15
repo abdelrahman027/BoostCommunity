@@ -33,11 +33,10 @@ class TaskDeliverableForm(forms.ModelForm):
         return task_id
 
 
-class TasksForm(forms.ModelForm):
-    class Meta:
-        model = Task
-        fields = ['TaskName', 'Employee',
-                  'Deadline',]
+# class TasksForm(forms.ModelForm):
+#     class Meta:
+#         model = Task
+#         fields = ['TaskName', 'Employee',]
 
     # TaskID = models.AutoField(primary_key=True)
     # Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)

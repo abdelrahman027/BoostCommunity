@@ -26,33 +26,17 @@
                     <p>Let’s get started, kindly fill up your email</p>
                     <form method="post" class="mx-auto form_content">
                         {% csrf_token %}
+
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control shadow-none w-75" name="first_name"
-                                id="floatingInput1" placeholder="first name" required>
-                            <label for="floatingInput1">First name</label>
+                            <input type="email" class="form-control shadow-none w-75" name="email" id="floatingInput3"
+                                placeholder="example@boostuae.com" required>
+                            <label for="floatingInput3">Email address</label>
                         </div>
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control shadow-none w-75" name="last_name"
-                                id="floatingInput2" placeholder="last name" required>
-                            <label for="floatingInput2">Last name</label>
+                            <input type="text" class="form-control shadow-none w-75" name="username" id="floatingInput4"
+                                placeholder="username" required>
+                            <label for="floatingInput4">Username</label>
                         </div>
-
-                        <input type="email" name="email" placeholder="example@boostuae.com" value="{{email}}" hidden
-                            required>
-
-
-                        <input type="text" name="username" placeholder="username" hidden value="{{username}}" required>
-
-
-
-                        <input type="password" class="form-control shadow-none w-75" name="password1" hidden
-                            value="{{password1}}" placeholder="***********">
-
-
-                        <input type="password" hidden name="password2" value="{{password2}}" id="floatingPassword2"
-                            placeholder="***********">
-
-
                         <div class="d-grid gap-2 align-items-center mt-4">
                             <button class="btn sign_in w-75" type="submit">Create new account</button>
                             <hr class="w-75">
