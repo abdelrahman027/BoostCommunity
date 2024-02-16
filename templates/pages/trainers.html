@@ -74,9 +74,9 @@ Trainers|Page
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="trainer__body">
 
-
+                                <input type="text" id="nav_Search" class="form-control" placeholder="Search...">
                                 {% for trainer in trainers %}
 
                                 <tr class="align-middle">
@@ -119,7 +119,53 @@ Trainers|Page
     </div>
 </div>
 
-
-
+<!-- JAVASCRIPT LOGIC @@@@@@@ -->
+<script>
+    const data = '{{trainer_json}}'
+    // console.log(data)
+    // #trainer__body
+    //#global_nav_search
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    console.log(rdata);
+    const local_search = document.getElementById('nav_Search')
+    const trainer__body = document.getElementById('trainer__body')
+    console.log(local_search);
+    let filteredArr = []
+    local_search.addEventListener('keyup', (e) =>
+    {
+        trainer__body.innerHTML = ""
+        filteredArr = rdata.filter(trainer => (trainer['FirstName'] + trainer['LastName']).includes(e.target.value))
+        console.log(filteredArr);
+        if (filteredArr.length > 0) {
+            filteredArr.map((item) =>
+            {
+                trainer__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${item.TrainerID}</th>
+                                    <td class="text-dark">
+                                        <img src="{% static 'front-end-static/images/instructor.jpg' %}"
+                                            class="trainer_image" alt="trainer image">
+                                            ${item.FirstName} ${item.LastName}
+                                    </td>
+                                    <td>${item.Qualifications}</td>
+                                    <td>${item.Certificates}</td>
+                                    <td>${item.Phone}</td>
+                                    <td>KSA</td>
+                                    <td class="price">50</td>
+                                    <td>
+                                        <div
+                                            class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                            <img class="icon m-1"
+                                                src="{% static 'front-end-static/images/icons/fox.svg' %}" alt="icon">
+                                            <span>14/18</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                    </td>
+                                </tr>`
+            })
+        }
+    })
+</script>
 
 {% endblock content %}

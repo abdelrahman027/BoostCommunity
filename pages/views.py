@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
@@ -11,7 +12,7 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable
+from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client
 from django.db.models import Sum, Q
 from django.utils import timezone
 # Create your views here.
@@ -181,10 +182,11 @@ def trainer(request):
         print(q)
     else:
         trainers_list = Trainer.objects.all()
-
+        # print(list(Trainer.objects.values()))
     context = {
         'trainers': trainers_list,
         'employee': employee,
+        'trainer_json': json.dumps(list(Trainer.objects.values()))
     }
 
     return render(request, 'pages/trainers.html', context)
@@ -226,6 +228,24 @@ def course(request):
     return render(request, 'pages/courses.html', context)
 
 
+def client(request):
+    employee = get_object_or_404(Employee, user=request.user)
+
+    if 'q' in request.GET:
+        q = request.GET['q']
+        clients_list = Client.objects.filter(
+            Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+        print(q)
+    else:
+        clients_list = Client.objects.all()
+
+    context = {
+        'clients': clients_list,
+        'employee': employee,
+    }
+    return render(request, 'pages/clients.html', context)
+
+
 def assign_deliverable(request, task_id):
     if request.method == 'POST':
         # Handle form submission, save deliverable, and update task status
@@ -258,8 +278,36 @@ def reporting(request):
 
 def employees_tracking(request):
     employee = get_object_or_404(Employee, user=request.user)
+    if 'qe' in request.GET:
+        qe = request.GET['qe']
+        employee_list = Employee.objects.filter(
+            Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
+    else:
+        employee_list = Employee.objects.all()
 
     context = {
         'employee': employee,
+        'employees': employee_list,
     }
     return render(request, 'pages/task_tracking.html', context)
+
+
+def employees_tracking_detail(request, id):
+    employee = get_object_or_404(Employee, user=request.user)
+    selected_employee = Employee.objects.get(pk=id)
+    if 'qe' in request.GET:
+        qe = request.GET['qe']
+        employee_list = Employee.objects.filter(
+            Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
+    else:
+        employee_list = Employee.objects.all()
+        # print(selected_employee.Task_set.all())
+
+    context = {
+        'employee': employee,
+        'selected_employee': selected_employee,
+        'employees': employee_list,
+        'id': id
+
+    }
+    return render(request, 'pages/task_tracking_detail.html', context)

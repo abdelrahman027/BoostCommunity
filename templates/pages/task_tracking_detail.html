@@ -1,0 +1,180 @@
+{% extends 'base_custom.html' %}
+{% load static %}
+
+
+{% block style %}
+
+<link rel="stylesheet" href="{% static 'front-end-static/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'front-end-static/css/style.min.css' %}">
+
+{% endblock style %}
+
+{% block title %}
+Tracking Employees
+{% endblock title %}
+
+
+
+{% block content %}
+
+
+
+
+{% include 'parts/navbar.html' %}
+<div class="row m-0">
+    {% include 'parts/side_nav.html' %}
+    <div class="col-9 tracking_content mt-4 offset_left" id="side_content">
+        <div style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#" class="link-underline link-underline-opacity-0">Employees</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Tracking mode</li>
+            </ol>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="persons rounded-2" style="padding: 24px;">
+                    <div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div class="search_container">
+                                <form>
+                                    <input type="text" name="qe" class="form-control" placeholder="Search...">
+                                </form>
+                            </div>
+                            <button type="button" class="btn ">
+                                <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon"
+                                    alt="icon">
+                            </button>
+                            <button type="button" class="btn ">
+                                <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                                    alt="icon">
+                            </button>
+                        </div>
+                    </div>
+                    <ul class="list-group">
+
+                        {% for emp in employees %}
+                        <!-- you can add class selected or not selected -->
+                        <li class="list-group-item 
+                        {% if id == selected_employee.EmployeeID %}
+                        selected
+                        {% endif %}
+                        ">
+                            <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}} ">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <img src="{{emp.EmployeePhoto.url}}" class="emp_image" alt="employee">
+                                        <span class="fw-bold">{{emp.FirstName|title}} {{emp.LastName|title}}</span>
+                                    </div>
+                                    <div class="btn-group me-2" role="group" aria-label="First group">
+                                        <button type="button" class="btn fw-bold total btn-outline-secondary">1</button>
+                                        <button type="button"
+                                            class="btn fw-bold in_progress btn-outline-secondary">2</button>
+                                        <button type="button"
+                                            class="btn fw-bold overdue btn-outline-secondary">3</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="job_container rounded-pill d-flex align-items-center">
+                                        <img src="{% static 'front-end-static/images/icons/job.svg' %}" alt="Job icon">
+                                        <span>{{emp.JobTitle|upper}}</span>
+                                    </div>
+                                    <div class="location_container rounded-pill d-flex align-items-center">
+                                        <img src="{% static 'front-end-static/images/icons/location.svg' %}"
+                                            alt="location icon">
+                                        <span>{{emp.Location|upper}}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-8">
+                <!-- DATA@@@@@@@@@@@@@@@@@@ -->
+                <div class="data rounded-2">
+                    <div class="data_head d-flex align-items-center">
+                        <div class="employee d-inline-flex align-items-center me-2 flex-grow-1">
+                            <img src="{{selected_employee.EmployeePhoto.url}}" class="emp_image" alt="employee">
+                            <h6 class="fw-bold ms-1">{{selected_employee.FirstName}}</h6>
+                        </div>
+                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                            <span>Total tasks</span>
+                            <h5>{{selected_employee.task_set.all.count}}</h5>
+                            <img src="{% static 'front-end-static/images/icons/total.svg' %}" alt="icon">
+                        </div>
+                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                            <span>In progress</span>
+                            <h5>{{selected_employee.task_set.all.count}}</h5>
+                            <img src="{% static 'front-end-static/images/icons/in_progress.svg' %}" alt="icon">
+                        </div>
+                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                            <span>Overdue</span>
+                            <h5>0</h5>
+                            <img src="{% static 'front-end-static/images/icons/overdue.svg' %}" alt="icon">
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mt-3">
+                        <div class="search_container">
+                            <input type="text" class="form-control" placeholder="Search...">
+                        </div>
+                        <div>
+                            <button type="button" class="btn ">
+                                <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon"
+                                    alt="icon">
+                            </button>
+                            <button type="button" class="btn ">
+                                <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                                    alt="icon">
+                            </button>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="tasks_data" style="max-height: 50vh; overflow: auto;">
+                        <!-- Tasks LOOP @@@@@@@@@@@ -->
+
+                        {% if selected_employee.task_set.all %}
+                        {% for task in selected_employee.task_set.all %}
+
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Task name</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col">Project</th>
+                                    <th scope="col">Customer</th>
+                                    <th scope="col">Assigned by</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th scope="row">{{task.TaskName|truncatechars:9}} </th>
+                                    <td>{{task.Status}}</td>
+                                    <td>{{task.Deadline}}</td>
+                                    <td>Boost Community</td>
+                                    <td>Rania</td>
+                                    <td>CEO</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {% endfor %}
+                        {% else %}
+                        <h3>No Tasks for {{selected_employee}}</h3>
+                        {% endif %}
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock content %}
