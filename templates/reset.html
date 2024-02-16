@@ -1,0 +1,54 @@
+{% extends 'base_custom.html' %}
+{% load static %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'front-end-static/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'front-end-static/css/style.min.css' %}">
+{% endblock style %}
+
+
+{% block content %}
+<div class="sign_up">
+    <div class="w-75 mx-auto position-relative">
+        <div class="login_container rounded">
+            <div class="row row-cols-2">
+                <div class="col left position-relative">
+                    <div class="d-flex justify-content-between mb-4 align-items-center">
+                        <img src=" {% static 'front-end-static/images/boost_logo2.png' %}" class="logo" alt="Logo">
+                        <a href="#" class="link-secondary link-underline-opacity-0 d-flex align-items-center">
+                            <img src="{% static 'front-end-static/images/icons/arrow_left.svg' %}" alt="icon"
+                                style="width: 20px;">
+                            <span class="px-1">Go back</span>
+                        </a>
+                    </div>
+                    <h4>Reset Password</h4>
+                    <p> kindly fill up your new password</p>
+                    <form method="post" class="mx-auto form_content">
+                        {% csrf_token %}
+
+                        <div class="form-floating">
+                            <input type="password" class="form-control shadow-none w-75" name="new_password1"
+                                id="floatingPassword" placeholder="***********">
+                            <label for="floatingPassword">Insert your password</label>
+                        </div>
+                        <div class="form-floating my-2">
+                            <input type="password" class="form-control shadow-none w-75" name="new_password2"
+                                id="floatingPassword2" placeholder="***********">
+                            <label for="floatingPassword2">confirm your password</label>
+                        </div>
+                        <div class="d-grid gap-2 align-items-center mt-4">
+                            <button class="btn sign_in w-75" type="submit">Reset Password</button>
+                        </div>
+                    </form>
+                    <div class="hint text-center mt-4 w-75">Any issues? Contact support@boostuae.com</div>
+                </div>
+                <div class="col">
+                    <img src="{% static 'front-end-static/images/user.png' %}" class="user_image img-fluid" alt="User">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock content %}

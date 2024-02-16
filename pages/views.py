@@ -16,6 +16,8 @@ from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, 
 from django.db.models import Sum, Q
 from django.utils import timezone
 # Create your views here.
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 def login_user(request):
@@ -23,9 +25,18 @@ def login_user(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(request, username=username, password=password)
-
         if user is not None:
             login(request, user)
+            # SENDING EMAIL LOGIC @@@@@@@
+            # subject = f'Welcome {username}'
+            # message = f"you logged in to Boost community as {username}"
+            # send_mail(
+            #     subject,
+            #     message,
+            #     settings.EMAIL_HOST_USER,
+            #     ['abdelrahmansaad027@gmail.com'],
+            #     fail_silently=False
+            # )
             return redirect('employee_profile')
         else:
             messages.error(request, 'Invalid username or password')
