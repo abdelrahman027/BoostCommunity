@@ -58,7 +58,8 @@ class Status(models.Model):
 class Task(models.Model):
     TaskID = models.AutoField(primary_key=True)
     Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    Status = models.ForeignKey(Status, on_delete=models.CASCADE, null=True)
+    Status = models.ForeignKey(
+        Status, on_delete=models.CASCADE, null=True, default=2)
     TaskName = models.CharField(max_length=255)
     Description = models.TextField(default="default description", null=True)
     Deadline = models.DateField(default=datetime.today(), null=True)

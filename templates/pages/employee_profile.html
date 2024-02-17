@@ -17,7 +17,6 @@ Employee Profile
 {% block content %}
 
 
-
 <div id="loading_container" class="loading_container d-flex align-items-center justify-content-center">
     <span class="loader"></span>
 </div>
@@ -67,15 +66,15 @@ Employee Profile
                     </div>
                 </li>
                 <li class="d-flex align-items-center">
-                    <span>3</span>
+                    <span>{{overdue_tasks.count}}</span>
                     <span class="description">Overdue</span>
                 </li>
                 <li class="d-flex align-items-center">
-                    <span>5</span>
+                    <span>{{inprogress_tasks.count}}</span>
                     <span class="description">Unfinished tasks</span>
                 </li>
                 <li class="d-flex align-items-center">
-                    <span>6</span>
+                    <span>{{completed_tasks.count}}</span>
                     <span class="description">Tasks completed</span>
                 </li>
             </ul>
@@ -93,7 +92,7 @@ Employee Profile
                     <div
                         class="total_finished_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
                         <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}" alt="icon">
-                        <span>0/{{tasks.count}}</span>
+                        <span>{{completed_tasks.count}}/{{tasks.count}}</span>
                     </div>
                 </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -151,7 +150,7 @@ Employee Profile
                                         class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
                                         <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}"
                                             alt="icon">
-                                        <span>0/{{tasks.count}}</span>
+                                        <span>{{completed_tasks.count}}/{{tasks.count}}</span>
                                     </div>
                                     <span class="badge bg-secondary mx-2">New</span>
                                     <span>{{task.Deadline|date:"d/m"}}</span>
@@ -162,11 +161,68 @@ Employee Profile
                     </div>
                     <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab"
                         tabindex="0">
-                        Two
+
+
+                        {% if 'overdue_tasks'%}
+                        <!-- Other task name -->
+
+                        {% for task in overdue_tasks %}
+
+
+
+                        <li class="my-3 list-group-item d-flex justify-content-between">
+                            <div>
+                                <img src="{% static 'front-end-static/images/icons/home/check_mark.svg' %}" class="icon"
+                                    alt="icon">
+                                {{task.TaskName}}
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div
+                                    class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                    <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}"
+                                        alt="icon">
+                                    <span>{{overdue_tasks.count}}/{{tasks.count}}</span>
+                                </div>
+                                <span class="badge bg-secondary mx-2">New</span>
+                                <span>{{task.Deadline|date:"d/m"}}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <h4>No over due tasks</h4>
+                        {% endif %}
+
                     </div>
                     <div class="tab-pane fade" id="contact-tab-pane" role="tabpanel" aria-labelledby="contact-tab"
                         tabindex="0">
-                        Three
+                        {% if 'completed_tasks'%}
+                        <!-- Other task name -->
+
+                        {% for task in completed_tasks %}
+
+
+
+                        <li class="list-group-item d-flex justify-content-between my-3">
+                            <div>
+                                <img src="{% static 'front-end-static/images/icons/home/check_mark.svg' %}" class="icon"
+                                    alt="icon">
+                                {{task.TaskName}}
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <div
+                                    class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                    <img class="icon m-1" src="{% static 'front-end-static/images/icons/fox.svg' %}"
+                                        alt="icon">
+                                    <span>{{completed_tasks.count}}/{{tasks.count}}</span>
+                                </div>
+                                <span class="badge bg-secondary mx-2">New</span>
+                                <span>{{task.Deadline|date:"d/m"}}</span>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <h4>No over due tasks</h4>
+                        {% endif %}
                     </div>
                 </div>
             </div>

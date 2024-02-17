@@ -55,8 +55,8 @@ Tracking Employees
 
                         {% for emp in employees %}
                         <!-- you can add class selected or not selected -->
-                        <li class="list-group-item ">
-                            <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}}">
+                        <li class="list-group-item  ">
+                            <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}}" style="text-decoration: none;">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
                                         <img src="{{emp.EmployeePhoto.url}}" class="emp_image" alt="employee">
@@ -91,29 +91,8 @@ Tracking Employees
             </div>
             <div class="col-8">
                 <!-- DATA@@@@@@@@@@@@@@@@@@ -->
-                <div class="data rounded-2">
-                    <div class="data_head d-flex align-items-center">
-                        <div class="employee d-inline-flex align-items-center me-2 flex-grow-1">
-                            <img src="{% static 'front-end-static/images/employee3.png' %}" class="emp_image"
-                                alt="employee">
-                            <h6 class="fw-bold ms-1">Mohammed Sami</h6>
-                        </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
-                            <span>Total tasks</span>
-                            <h5>30</h5>
-                            <img src="{% static 'front-end-static/images/icons/total.svg' %}" alt="icon">
-                        </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
-                            <span>In progress</span>
-                            <h5>30</h5>
-                            <img src="{% static 'front-end-static/images/icons/in_progress.svg' %}" alt="icon">
-                        </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
-                            <span>Overdue</span>
-                            <h5>30</h5>
-                            <img src="{% static 'front-end-static/images/icons/overdue.svg' %}" alt="icon">
-                        </div>
-                    </div>
+                <div class="data rounded-2" style="min-height: 544.5px;">
+                    <h3>Please select an Employee</h3>
                     <div class="d-flex align-items-center justify-content-between mt-3">
                         <div class="search_container">
                             <input type="text" class="form-control" placeholder="Search...">
@@ -130,9 +109,10 @@ Tracking Employees
                         </div>
                     </div>
                     <hr>
+
                     <div class="tasks_data" style="max-height: 50vh; overflow: auto;">
                         <table class="table table-borderless">
-                            <thead>
+                            <thead class="rounded-2">
                                 <tr>
                                     <th scope="col">Task name</th>
                                     <th scope="col">Status</th>
@@ -142,129 +122,18 @@ Tracking Employees
                                     <th scope="col">Assigned by</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="rounded-2">
                                 <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
+                                    <th scope="row">select employee </th>
+                                    <td>select employee</td>
+                                    <td>Date</td>
+                                    <td>Project name</td>
+                                    <td>Client name</td>
+                                    <td>Assigned by</td>
                                 </tr>
                             </tbody>
-                        </table>
+                            <h2>Please select an employee</h2>
 
-
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Task name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Deadline</th>
-                                    <th scope="col">Project</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Assigned by</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Task name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Deadline</th>
-                                    <th scope="col">Project</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Assigned by</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Task name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Deadline</th>
-                                    <th scope="col">Project</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Assigned by</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Task name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Deadline</th>
-                                    <th scope="col">Project</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Assigned by</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Task name</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Deadline</th>
-                                    <th scope="col">Project</th>
-                                    <th scope="col">Customer</th>
-                                    <th scope="col">Assigned by</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">Bench marking and Briefing </th>
-                                    <td>Ongoing</td>
-                                    <td>16-10-2023</td>
-                                    <td>Marketing Campaign</td>
-                                    <td>Mohammed Yasser</td>
-                                    <td>Ramadan Mohamed</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

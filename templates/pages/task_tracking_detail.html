@@ -56,11 +56,8 @@ Tracking Employees
                         {% for emp in employees %}
                         <!-- you can add class selected or not selected -->
                         <li class="list-group-item 
-                        {% if id == selected_employee.EmployeeID %}
-                        selected
-                        {% endif %}
                         ">
-                            <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}} ">
+                            <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}} " style="text-decoration: none;">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
                                         <img src="{{emp.EmployeePhoto.url}}" class="emp_image" alt="employee">
@@ -95,23 +92,23 @@ Tracking Employees
             </div>
             <div class="col-8">
                 <!-- DATA@@@@@@@@@@@@@@@@@@ -->
-                <div class="data rounded-2">
+                <div class="data rounded-2" style="min-height: 544.5px;">
                     <div class="data_head d-flex align-items-center">
                         <div class="employee d-inline-flex align-items-center me-2 flex-grow-1">
                             <img src="{{selected_employee.EmployeePhoto.url}}" class="emp_image" alt="employee">
                             <h6 class="fw-bold ms-1">{{selected_employee.FirstName}}</h6>
                         </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                        <div class="task_card justify-content-around d-inline-flex align-items-center rounded-2">
                             <span>Total tasks</span>
                             <h5>{{selected_employee.task_set.all.count}}</h5>
                             <img src="{% static 'front-end-static/images/icons/total.svg' %}" alt="icon">
                         </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                        <div class="task_card justify-content-around d-inline-flex align-items-center rounded-2">
                             <span>In progress</span>
                             <h5>{{selected_employee.task_set.all.count}}</h5>
                             <img src="{% static 'front-end-static/images/icons/in_progress.svg' %}" alt="icon">
                         </div>
-                        <div class="task_card justify-content-around d-inline-flex align-items-center">
+                        <div class="task_card justify-content-around d-inline-flex align-items-center rounded-2">
                             <span>Overdue</span>
                             <h5>0</h5>
                             <img src="{% static 'front-end-static/images/icons/overdue.svg' %}" alt="icon">

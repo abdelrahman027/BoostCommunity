@@ -32,6 +32,7 @@ Employees|Page
                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
                         type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Not Active <span
                             class="badge bg-secondary fw-normal">{{employees.count}}</span></button>
+                    <!-- SEARCH TOGGLER BUTTON -->
                     <img src="{% static 'front-end-static/images/icons/search.svg' %}" class="icon" alt="icon">
                 </div>
                 <div class="right d-flex">
@@ -58,6 +59,8 @@ Employees|Page
                             alt="icon">
                     </button>
                 </div>
+                <!-- HIDDEN SEARCH INPUT -->
+                <input type="hidden" id="nav_Search" class="form-control" placeholder="Search...">
             </div>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
@@ -76,7 +79,7 @@ Employees|Page
                                     <th scope="col">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="employee__body">
 
                                 {% for emp in employees %}
 
@@ -156,7 +159,12 @@ Employees|Page
 </div>
 
 
-<!-- <script src="stat/js/main.js"></script>
-<script src="./js/bootstrap.bundle.min.js"></script> -->
+<!-- JAVASCRIPT LOGIC @@@@@@@ -->
+<script>
+    const data = '{{employee_json}}'
+    console.log(data);
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    console.log(rdata);
+</script>
 
 {% endblock content %}

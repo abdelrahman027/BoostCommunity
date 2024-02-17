@@ -96,14 +96,74 @@ Courses|Page
                     </div>
                 </div>
                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
-                    tabindex="0">...</div>
+                    tabindex="0">
+                    <div class="table_container mt-4 table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Sr.</th>
+                                    <th scope="col">Course Name</th>
+                                    <th scope="col">Instructor Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Locations</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <h4 style="padding: .5rem;color: inherit;">No public courses yet</h4>
+                    </div>
+                </div>
                 <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
-                    tabindex="0">...</div>
+                    tabindex="0">
+                    <div class="table_container mt-4 table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Sr.</th>
+                                    <th scope="col">Course Name</th>
+                                    <th scope="col">Instructor Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Locations</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+
+                                <tr class="align-middle">
+                                    <th scope="row">{{course.CourseID}}</th>
+                                    <td>FNBN 00{{course.CourseID}}</td>
+                                    <td class="text-dark">{{course.CourseName|title}}</td>
+                                    <td>{{course.InstructorName|title}}</td>
+                                    <td class="price">{{course.Price}}</td>
+                                    <td>{{course.StartDate}}</td>
+                                    <td>{{course.Duration}}</td>
+                                    <td>{{course.Location|upper}}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
+<script>
+    const data = '{{course_json}}'
+    console.log(data);
+</script>
 
 {% endblock content %}

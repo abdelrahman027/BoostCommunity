@@ -15,9 +15,10 @@ from django.contrib.auth.models import User
 from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client
 from django.db.models import Sum, Q
 from django.utils import timezone
-# Create your views here.
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import datetime
+# Create your views here.
 
 
 def login_user(request):
@@ -143,7 +144,9 @@ def employee_profile(request):
     # employee = Employee.objects.get(user=request.user)
     employee = get_object_or_404(Employee, user=request.user)
     tasks = Task.objects.filter(Employee=employee)
-
+    completed_tasks = Task.objects.filter(Employee=employee, Status=1)
+    overdue_tasks = Task.objects.filter(Employee=employee, Status=3)
+    inprogress_tasks = Task.objects.filter(Employee=employee, Status=2)
     # Get the current month
     current_month = timezone.now().month
 
@@ -178,6 +181,9 @@ def employee_profile(request):
         'deliverable_form': deliverable_form,
         'current_month_performance': current_month_performance,
         'badges': badges,
+        'completed_tasks': completed_tasks,
+        'inprogress_tasks': inprogress_tasks,
+        'overdue_tasks': overdue_tasks,
     }
 
     return render(request, 'pages/employee_profile.html', context)
@@ -205,18 +211,21 @@ def trainer(request):
 
 def employee(request):
     employee = get_object_or_404(Employee, user=request.user)
+    employee_json = json.dumps(
+        list(Employee.objects.values()), indent=4, sort_keys=True, default=str),
 
     if 'q' in request.GET:
         q = request.GET['q']
         employee_list = Employee.objects.filter(
             Q(FirstName__icontains=q) | Q(LastName__icontains=q))
-        print(q)
     else:
         employee_list = Employee.objects.all()
+        print(employee_json)
 
     context = {
         'employees': employee_list,
         'employee': employee,
+        'employee_json': employee_json
     }
 
     return render(request, 'pages/employees.html', context)
@@ -224,6 +233,8 @@ def employee(request):
 
 def course(request):
     employee = get_object_or_404(Employee, user=request.user)
+    course_json = json.dumps(
+        list(Course.objects.values()), default=str),
 
     if 'q' in request.GET:
         q = request.GET['q']
@@ -235,12 +246,14 @@ def course(request):
     context = {
         'courses': courses_list,
         'employee': employee,
+        'course_json': course_json
     }
     return render(request, 'pages/courses.html', context)
 
 
 def client(request):
     employee = get_object_or_404(Employee, user=request.user)
+    # client_json = json.dumps(list(Client.objects.values())),
 
     if 'q' in request.GET:
         q = request.GET['q']
@@ -253,6 +266,8 @@ def client(request):
     context = {
         'clients': clients_list,
         'employee': employee,
+        'client_json': json.dumps(list(Client.objects.values())),
+
     }
     return render(request, 'pages/clients.html', context)
 
