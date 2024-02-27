@@ -33,7 +33,8 @@ Employees|Page
                         type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Not Active <span
                             class="badge bg-secondary fw-normal">{{employees.count}}</span></button>
                     <!-- SEARCH TOGGLER BUTTON -->
-                    <img src="{% static 'front-end-static/images/icons/search.svg' %}" class="icon" alt="icon">
+                    <img src="{% static 'front-end-static/images/icons/search.svg' %}" style="cursor: pointer;"
+                        onclick="search_toggler()" class="icon" alt="icon">
                 </div>
                 <div class="right d-flex">
                     <a href="{% url 'employees-tracking' %}"
@@ -60,7 +61,7 @@ Employees|Page
                     </button>
                 </div>
                 <!-- HIDDEN SEARCH INPUT -->
-                <input type="hidden" id="nav_Search" class="form-control" placeholder="Search...">
+                <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
             </div>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
@@ -162,9 +163,51 @@ Employees|Page
 <!-- JAVASCRIPT LOGIC @@@@@@@ -->
 <script>
     const data = '{{employee_json}}'
-    console.log(data);
+    let filteredArr = [];
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
     console.log(rdata);
+    const local_search = document.getElementById('nav_Search')
+    const employee__body = document.getElementById('employee__body')
+    local_search.addEventListener('keyup', (e) =>
+    {
+        employee__body.innerHTML = ""
+        filteredArr = rdata.filter((employee) => (employee['FirstName'] + employee['LastName']).includes(e.target.value))
+        console.log(filteredArr);
+        if (filteredArr.length > 0) {
+            filteredArr.map((emp) =>
+            {
+                employee__body.innerHTML += `                                <tr class="align-middle">
+                                    <th scope="row">${emp.EmployeeID}</th>
+                                    <td class="text-dark d-flex align-items-center">
+                                        <div class="image_container  offline">
+                                            <img src="${emp.EmployeePhoto}" class="employee_image"
+                                                alt="Employee image">
+                                        </div>
+                                        <span class="ms-1">${emp.FirstName}</span>
+                                    </td>
+                                    <td>${emp.JobTitle}</td>
+                                    <td>${emp.Email}</td>
+                                    <td>${emp.Phone}</td>
+                                    <td>${emp.Location}</td>
+                                    <td class="price">${emp.PerHour}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon"
+                                            class="employee_image">
+                                    </td>
+                                </tr>`
+            })
+        }
+    })
+
+    const toggle_search = document.getElementById('toggle_search')
+    const search_toggler = () =>
+    {
+        if (local_search.type == 'hidden') {
+            local_search.type = 'text'
+        } else {
+            local_search.type = 'hidden'
+        }
+    };
 </script>
 
 {% endblock content %}

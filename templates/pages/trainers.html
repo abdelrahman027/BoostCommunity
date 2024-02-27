@@ -179,11 +179,11 @@ Trainers|Page
     // #trainer__body
     //#global_nav_search
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-    console.log(rdata);
+
     const local_search = document.getElementById('nav_Search')
     const trainer__body = document.getElementById('trainer__body')
     console.log(local_search);
-    let filteredArr = []
+
     local_search.addEventListener('keyup', (e) =>
     {
         trainer__body.innerHTML = ""

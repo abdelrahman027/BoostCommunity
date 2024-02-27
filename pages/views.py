@@ -171,9 +171,10 @@ def employee_profile(request):
 
     if request.method == 'POST':
         taskname = request.POST.get('TaskName', False)
-        Task.objects.create(TaskName=taskname, Employee=employee)
-        print(employee)
-        return redirect('employee_profile')
+        if len(taskname) > 0:
+            Task.objects.create(TaskName=taskname, Employee=employee)
+            print(employee)
+            return redirect('employee_profile')
 
     context = {
         'employee': employee,
@@ -211,8 +212,6 @@ def trainer(request):
 
 def employee(request):
     employee = get_object_or_404(Employee, user=request.user)
-    employee_json = json.dumps(
-        list(Employee.objects.values()), indent=4, sort_keys=True, default=str),
 
     if 'q' in request.GET:
         q = request.GET['q']
@@ -220,12 +219,11 @@ def employee(request):
             Q(FirstName__icontains=q) | Q(LastName__icontains=q))
     else:
         employee_list = Employee.objects.all()
-        print(employee_json)
 
     context = {
         'employees': employee_list,
         'employee': employee,
-        'employee_json': employee_json
+        'employee_json': json.dumps(list(Employee.objects.values()), sort_keys=True, default=str)
     }
 
     return render(request, 'pages/employees.html', context)
@@ -233,8 +231,8 @@ def employee(request):
 
 def course(request):
     employee = get_object_or_404(Employee, user=request.user)
-    course_json = json.dumps(
-        list(Course.objects.values()), default=str),
+    # course_json = json.dumps(
+    #     list(Course.objects.values()), default=str),
 
     if 'q' in request.GET:
         q = request.GET['q']
@@ -246,7 +244,7 @@ def course(request):
     context = {
         'courses': courses_list,
         'employee': employee,
-        'course_json': course_json
+        'course_json': json.dumps(list(Course.objects.values()), sort_keys=True, default=str),
     }
     return render(request, 'pages/courses.html', context)
 
@@ -295,9 +293,27 @@ def assign_deliverable(request, task_id):
 
 def reporting(request):
     employee = get_object_or_404(Employee, user=request.user)
+    task_progress = random.randint(0, 100)
+    target_profit = random.randint(10000, 50000)
+    achieved_percentage = random.randint(0, 100)
+    top_employees = [{'name': f'Employee {i}',
+                      'points': random.randint(50, 100)} for i in range(1, 6)]
+    public_courses = [{'name': f'Course {i}', 'revenue': random.randint(
+        5000, 20000), 'trainer': f'Trainer {i}'} for i in range(1, 6)]
+    departments_data = [{'department': f'Department {i}', 'progress': random.randint(
+        0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
+    low_performance_employees = [{'name': f'Employee {
+        i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
     context = {
         'employee': employee,
+        'task_progress': task_progress,
+        'target_profit': target_profit,
+        'achieved_percentage': achieved_percentage,
+        'top_employees': top_employees,
+        'public_courses': public_courses,
+        'departments_data': departments_data,
+        'low_performance_employees': low_performance_employees,
     }
     return render(request, 'pages/reporting.html', context)
 
@@ -321,6 +337,10 @@ def employees_tracking(request):
 def employees_tracking_detail(request, id):
     employee = get_object_or_404(Employee, user=request.user)
     selected_employee = Employee.objects.get(pk=id)
+    completed_tasks = Task.objects.filter(Employee=selected_employee, Status=1)
+    overdue_tasks = Task.objects.filter(Employee=selected_employee, Status=3)
+    inprogress_tasks = Task.objects.filter(
+        Employee=selected_employee, Status=2)
     if 'qe' in request.GET:
         qe = request.GET['qe']
         employee_list = Employee.objects.filter(
@@ -333,7 +353,10 @@ def employees_tracking_detail(request, id):
         'employee': employee,
         'selected_employee': selected_employee,
         'employees': employee_list,
-        'id': id
+        'id': id,
+        'completed_tasks': completed_tasks,
+        'inprogress_tasks': inprogress_tasks,
+        'overdue_tasks': overdue_tasks,
 
     }
     return render(request, 'pages/task_tracking_detail.html', context)

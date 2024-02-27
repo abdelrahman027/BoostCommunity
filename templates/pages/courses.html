@@ -34,7 +34,8 @@ Courses|Page
                     <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
                         type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Draft <span
                             class="badge bg-secondary fw-normal">{{courses.count}}</span></button>
-                    <img src="{% static 'front-end-static/images/icons/search.svg' %}" class="icon" alt="icon">
+                    <img src="{% static 'front-end-static/images/icons/search.svg' %}" style="cursor: pointer;"
+                        onclick="search_toggler()" class="icon" alt="icon">
                 </div>
                 <div class="right d-flex">
                     <div class="d-flex listing">
@@ -55,6 +56,7 @@ Courses|Page
                             alt="icon">
                     </button>
                 </div>
+                <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
             </div>
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
@@ -74,7 +76,7 @@ Courses|Page
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="course__body">
                                 {% for course in courses %}
 
                                 <tr class="align-middle">
@@ -163,7 +165,46 @@ Courses|Page
 
 <script>
     const data = '{{course_json}}'
-    console.log(data);
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    console.log(rdata);
+    const local_search = document.getElementById('nav_Search')
+    const course__body = document.getElementById('course__body')
+    let filteredArr = [];
+    local_search.addEventListener('keyup', (e) =>
+    {
+        course__body.innerHTML = ""
+        console.log(filteredArr);
+        filteredArr = rdata.filter((course) => (course['CourseName']).includes(e.target.value))
+        if (filteredArr.length > 0) {
+            filteredArr.map((item) =>
+            {
+                course__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${item.CourseID}</th>
+                                    <td>FNBN 00${item.CourseID}</td>
+                                    <td class="text-dark">${item.CourseName}</td>
+                                    <td>${item.InstructorName}</td>
+                                    <td class="price">{{course.Price}}</td>
+                                    <td>${item.StartDate}</td>
+                                    <td>${item.Duration}</td>
+                                    <td>${item.Location}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                        </td>
+                                </tr>`
+            })
+        }
+    })
+
+    const toggle_search = document.getElementById('toggle_search')
+    const search_toggler = () =>
+    {
+        if (local_search.type == 'hidden') {
+            local_search.type = 'text'
+        } else {
+            local_search.type = 'hidden'
+        }
+    };
+
 </script>
 
 {% endblock content %}

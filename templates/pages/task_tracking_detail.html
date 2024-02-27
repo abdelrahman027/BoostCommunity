@@ -54,9 +54,14 @@ Tracking Employees
                     <ul class="list-group">
 
                         {% for emp in employees %}
-                        <!-- you can add class selected or not selected -->
                         <li class="list-group-item 
-                        ">
+                            
+                            {% if id == selected_employee.pk%}
+                                
+                            {% else %}
+                            {% endif %}
+                               employeesList ">
+                            <!-- you can add class selected or not selected -->
                             <a href="{% url 'employees-tracking' %}/{{emp.EmployeeID}} " style="text-decoration: none;">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div>
@@ -105,12 +110,12 @@ Tracking Employees
                         </div>
                         <div class="task_card justify-content-around d-inline-flex align-items-center rounded-2">
                             <span>In progress</span>
-                            <h5>{{selected_employee.task_set.all.count}}</h5>
+                            <h5>{{inprogress_tasks.count}}</h5>
                             <img src="{% static 'front-end-static/images/icons/in_progress.svg' %}" alt="icon">
                         </div>
                         <div class="task_card justify-content-around d-inline-flex align-items-center rounded-2">
                             <span>Overdue</span>
-                            <h5>0</h5>
+                            <h5>{{overdue_tasks.count}}</h5>
                             <img src="{% static 'front-end-static/images/icons/overdue.svg' %}" alt="icon">
                         </div>
                     </div>
@@ -174,4 +179,20 @@ Tracking Employees
 
 
 
+<script>
+    const employeesList = document.querySelectorAll(".employeesList");
+    console.log(employeesList);
+    employeesList.forEach((item) =>
+    {
+        item.addEventListener('mouseover', () =>
+        {
+            item.style.background = '#e6eef2'
+        })
+        item.addEventListener('mouseout', () =>
+        {
+            item.style.background = ''
+        })
+
+    });
+</script>
 {% endblock content %}
