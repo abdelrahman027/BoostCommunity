@@ -41,15 +41,15 @@ Reporting|Page
                         <div class="desc">
                             <div>
                                 <span>Target : </span>
-                                <span class="price">{{target_profit}}K</span>
+                                <span class="price">{{sales_Data.SalesTarget}} K</span>
                             </div>
                             <div>
                                 <span>Min. Target : </span>
-                                <span class="price">{{target_profit}}K</span>
+                                <span class="price">{{min_target}} K</span>
                             </div>
                             <div class="min_target">
                                 <span>Min. Target : </span>
-                                <span class="percentage">{{achieved_percentage}}</span>
+                                <span class="percentage">{{sales_Data.SalesAchievement}}</span>
                             </div>
                         </div>
                         <!-- TODO : ------ Enter your data at data_price attribute without $
@@ -57,9 +57,10 @@ Reporting|Page
                             -->
                         <div class="progress w-100 mt-4 position-relative financial_progress overflow-visible"
                             role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0"
-                            aria-valuemax="100" data_price="{{achieved_percentage}}">
+                            aria-valuemax="100" data_price="{{sales_progress|floatformat:'2'}}">
                             <div class="target" style="left: 60%"></div>
-                            <div class="progress-bar rounded-start" style="width: 25%"></div>
+                            <div class="progress-bar rounded-start" style="width:25%;">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -73,7 +74,7 @@ Reporting|Page
                                 <div class="desc">
                                     <div>
                                         <span>Total Projects: </span>
-                                        <span>4 projects</span>
+                                        <span>{{employee.task_set.all.count}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -553,6 +554,11 @@ Reporting|Page
 
 
     /**************************************** highest_reporting_chart ************************/
+    let dataList = '{{PerformanceJson}}';
+    let rDataList = JSON.parse(dataList.replace(/&quot;/g, '"'))
+
+
+    console.log(rDataList);
     const lowData = [
         { id: 1, region: 'USA', value: 12, image: "{% static 'reporting-static/images/employee.jpg' %}" },
         { id: 2, region: 'China', value: 16, image: "{% static 'reporting-static/images/employee.jpg' %}" },

@@ -12,6 +12,14 @@
                 <img src="{% static 'front-end-static/images/icons/plus.svg' %}" class="icon" alt="plus icon">
                 <span>Create</span>
             </button>
+
+            {% if employee.user.is_superuser %}
+
+            <button type="button" class="btn btn-info mx-2 text-white">
+                <a style="color: #fff;" href="{% url 'admin:index' %}">Admin panel</a>
+            </button>
+            {% endif %}
+
         </div>
         <div class="search_container">
             <form>

@@ -41,6 +41,8 @@ class Employee(models.Model):
         upload_to='employee_photos/', default='employee_photos/default-employee.webp', null=True, blank=True)
     Location = models.CharField(max_length=50, null=True)
     PerHour = models.CharField(max_length=10, null=True)
+    EmployeeTarget = models.IntegerField(max_length=10, null=True, blank=True)
+    MinTarget = models.IntegerField(max_length=3, null=True, blank=True)
 
     def __str__(self):
         return self.FirstName

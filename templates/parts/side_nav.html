@@ -23,6 +23,7 @@
             </li>
         </ul>
         <hr class="border border-secondary border-1 opacity-50">
+
         <ul>
             <li class="title">
                 <div>organization</div>
@@ -36,7 +37,7 @@
             </li>
             <li class="{% if trainers %}
             active
-        {% endif %}">
+            {% endif %}">
                 <a href="{% url 'trainers' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/trainers.svg' %}"
                         alt="icon">
@@ -46,7 +47,7 @@
             <li class="
             {% if courses %}
                 active
-            {% endif %}
+                {% endif %}
                 ">
                 <a href="{% url 'courses' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/courses.svg' %}" alt="icon">
@@ -55,10 +56,11 @@
             </li>
         </ul>
         <hr class="border border-secondary border-1 opacity-50">
+        {% if employee.user.is_superuser %}
         <ul>
             <li class="{% if employees %}
             active
-        {% endif %}">
+            {% endif %}">
                 <a href="{% url 'employees' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/employees.svg' %}"
                         alt="icon">
@@ -66,14 +68,15 @@
                 </a>
             </li>
             <li class="{% if clients %}
-            active
-        {% endif %}">
+                active
+                {% endif %}">
                 <a href="{% url 'clients' %}">
                     <img class="icon" src="{% static 'front-end-static/images/icons/sidebar/clients.svg' %}" alt="icon">
                     <span>Clients</span>
                 </a>
             </li>
         </ul>
+        {% endif %}
         <img src="{% static 'front-end-static/images/boost_logo.png' %}" class="logo" alt="logo">
     </div>
 </div>

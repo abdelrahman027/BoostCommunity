@@ -2,8 +2,8 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.contrib import messages
-from chartjs.views.lines import BaseLineChartView
-from chartjs.views.pie import HighChartPieView
+# from chartjs.views.lines import BaseLineChartView
+# from chartjs.views.pie import HighChartPieView
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import random
@@ -190,6 +190,7 @@ def employee_profile(request):
     return render(request, 'pages/employee_profile.html', context)
 
 
+@login_required
 def trainer(request):
 
     employee = get_object_or_404(Employee, user=request.user)
@@ -210,6 +211,7 @@ def trainer(request):
     return render(request, 'pages/trainers.html', context)
 
 
+@login_required
 def employee(request):
     employee = get_object_or_404(Employee, user=request.user)
 
@@ -229,6 +231,7 @@ def employee(request):
     return render(request, 'pages/employees.html', context)
 
 
+@login_required
 def course(request):
     employee = get_object_or_404(Employee, user=request.user)
     # course_json = json.dumps(
@@ -249,6 +252,7 @@ def course(request):
     return render(request, 'pages/courses.html', context)
 
 
+@login_required
 def client(request):
     employee = get_object_or_404(Employee, user=request.user)
     # client_json = json.dumps(list(Client.objects.values())),
@@ -291,10 +295,15 @@ def assign_deliverable(request, task_id):
     return redirect('employee_profile')
 
 
+@login_required
 def reporting(request):
     employee = get_object_or_404(Employee, user=request.user)
-    task_progress = random.randint(0, 100)
-    target_profit = random.randint(10000, 50000)
+    employeeTasks = Task.objects.filter(Employee=employee)
+    completed_tasks = Task.objects.filter(Employee=employee, Status=1)
+    task_progress = len(completed_tasks)/len(employeeTasks) * 100
+    PerformanceAsc = Performance.objects.all().order_by("TotalPoints")
+    PerformanceDes = Performance.objects.all().order_by("-TotalPoints")
+
     achieved_percentage = random.randint(0, 100)
     top_employees = [{'name': f'Employee {i}',
                       'points': random.randint(50, 100)} for i in range(1, 6)]
@@ -305,19 +314,32 @@ def reporting(request):
     low_performance_employees = [{'name': f'Employee {
         i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
+    sales_Data = Salesman.objects.get(Employee=employee)
+    min_target_value = sales_Data.SalesTarget * \
+        (sales_Data.SalesAchievement)/100
+    min_target = "%.1f" % round(min_target_value, 2)
+    sales_progress = sales_Data.SalesTarget * (sales_Data.SalesProgress)/100
+
     context = {
         'employee': employee,
         'task_progress': task_progress,
-        'target_profit': target_profit,
+        'min_target': min_target,
         'achieved_percentage': achieved_percentage,
         'top_employees': top_employees,
         'public_courses': public_courses,
         'departments_data': departments_data,
         'low_performance_employees': low_performance_employees,
+        'sales_Data': sales_Data,
+        'sales_progress': sales_progress,
+        "PerformanceAsc": PerformanceAsc,
+        "PerformanceDes": PerformanceDes,
+        "PerformanceJson": json.dumps(list(Performance.objects.values()), sort_keys=True, default=str),
+        'employee_json': json.dumps(list(Employee.objects.values()), sort_keys=True, default=str)
     }
     return render(request, 'pages/reporting.html', context)
 
 
+@login_required
 def employees_tracking(request):
     employee = get_object_or_404(Employee, user=request.user)
     if 'qe' in request.GET:
@@ -334,6 +356,7 @@ def employees_tracking(request):
     return render(request, 'pages/task_tracking.html', context)
 
 
+@login_required
 def employees_tracking_detail(request, id):
     employee = get_object_or_404(Employee, user=request.user)
     selected_employee = Employee.objects.get(pk=id)
