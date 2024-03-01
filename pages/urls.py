@@ -20,6 +20,11 @@ urlpatterns = [
     path('employees/tracking/<int:id>', views.employees_tracking_detail,
          name='employees-tracking-detail'),
     path('employee_profile/', views.employee_profile, name='employee_profile'),
+    path('employee_profile/my-tasks', views.my_tasks, name='my-tasks'),
+    path('employee_profile/my-tasks/<int:id>',
+         views.my_tasks_detail, name='my-tasks-detail'),
+    path('logout',
+         views.logout_user, name='logout'),
 
 
     # //////Reset Views

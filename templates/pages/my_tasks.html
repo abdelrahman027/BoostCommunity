@@ -1,0 +1,286 @@
+{% extends 'base_custom.html' %}
+{% load static %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'front-end-static/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'front-end-static/css/style.min.css' %}">
+{% endblock style %}
+
+
+{% block title %}
+Courses|Page
+{% endblock title %}
+
+
+{% block content %}
+
+
+
+{% include 'parts/navbar.html' %}
+<div class="row m-0">
+    {% include 'parts/side_nav.html' %}
+    <div class="col-9 courses_content mt-4 offset_left" id="side_content">
+        <h3 class="text-capitalize my-2">My Tasks</h3>
+        <div class="courses_container shadow p-3 mb-5 bg-body-tertiary rounded">
+            <div class="nav justify-content-between" id="nav-tab" role="tablist">
+                <div class="d-flex align-items-center">
+                    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">All <span
+                            class="badge bg-secondary fw-normal">{{tasks.count}}</span></button>
+                    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Overdue <span
+                            class="badge bg-secondary fw-normal">{{overdue_tasks.count}}</span></button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
+                        type="button" role="tab" aria-controls="nav-contact" aria-selected="false">In Progress <span
+                            class="badge bg-secondary fw-normal">{{inprogress_tasks.count}}</span></button>
+                    <img src="{% static 'front-end-static/images/icons/search.svg' %}" style="cursor: pointer;"
+                        onclick="search_toggler()" class="icon" alt="icon">
+                </div>
+                <div class="right d-flex">
+                    <div class="d-flex listing">
+                        <button type="button" class="btn btn-outline-dark d-flex align-items-center">
+                            <img src="{% static 'front-end-static/images/icons/table/list.svg' %}" class="icon"
+                                alt="icon">
+                        </button>
+                        <button type="button" class="btn btn-outline-dark d-flex align-items-center">
+                            <img src="{% static 'front-end-static/images/icons/table/grid.svg' %}" class="icon"
+                                alt="icon">
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-outline-dark">
+                        <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon" alt="icon">
+                    </button>
+                    <button type="button" class="btn btn-outline-dark">
+                        <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                            alt="icon">
+                    </button>
+                </div>
+                <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"
+                    tabindex="0">
+                    <div class="table_container mt-4 table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Task Code</th>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Task Status</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Task priority</th>
+                                    <th scope="col">Employee name</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="course__body">
+
+                                {% if tasks %}
+                                {% for task in tasks %}
+
+                                <tr class="align-middle">
+                                    <th scope="row">{{task.TaskID}}</th>
+                                    <td>TNBN00{{task.TaskID}}</td>
+                                    <td class="text-dark">{{task.TaskName|title}}</td>
+                                    <td>{{task.Status|title}}</td>
+                                    <td>{{task.Deadline}}</td>
+                                    <td>{{task.TaskDuration}} Day</td>
+                                    <td>{{task.TaskPriority}}</td>
+                                    <td>{{task.Employee.FirstName|upper}}</td>
+                                    <td>
+
+                                        <div class="dropdown">
+                                            <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <img src="{% static 'front-end-static/images/icons/dots.svg' %}"
+                                                    alt="icon">
+                                            </button>
+                                            <ul class="dropdown-menu" style="transition: none;">
+                                                <li><a class="dropdown-item"
+                                                        href=" {% url 'my-tasks' %}/{{task.TaskID}}">View Task</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <h2 class="p-2">Nothing to see here</h2>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+                    tabindex="0">
+                    <div class="table_container mt-4 table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Task Code</th>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Task Status</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Task priority</th>
+                                    <th scope="col">Employee name</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="course__body">
+
+                                {% if overdue_tasks %}
+
+
+
+                                {% for task in overdue_tasks %}
+
+                                <tr class="align-middle">
+                                    <th scope="row">{{task.TaskID}}</th>
+                                    <td>TNBN00{{task.TaskID}}</td>
+                                    <td class="text-dark">{{task.TaskName|title}}</td>
+                                    <td>{{task.Status|title}}</td>
+                                    <td>{{task.Deadline}}</td>
+                                    <td>{{task.TaskDuration}} Day</td>
+                                    <td>{{task.TaskPriority}}</td>
+                                    <td>{{task.Employee.FirstName|upper}}</td>
+                                    <td>
+
+                                        <div class="dropdown">
+                                            <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <img src="{% static 'front-end-static/images/icons/dots.svg' %}"
+                                                    alt="icon">
+                                            </button>
+                                            <ul class="dropdown-menu" style="transition: none;">
+                                                <li><a class="dropdown-item"
+                                                        href=" {% url 'my-tasks' %}/{{task.TaskID}}">View Task</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <h2 class="p-2">Nothing to see here</h2>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab"
+                    tabindex="0">
+                    <div class="table_container mt-4 table-responsive">
+                        <table class="table mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Task Code</th>
+                                    <th scope="col">Task Name</th>
+                                    <th scope="col">Task Status</th>
+                                    <th scope="col">Deadline</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Task priority</th>
+                                    <th scope="col">Employee name</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="course__body">
+
+                                {% if inprogress_tasks %}
+
+
+
+                                {% for task in inprogress_tasks %}
+
+                                <tr class="align-middle">
+                                    <th scope="row">{{task.TaskID}}</th>
+                                    <td>TNBN00{{task.TaskID}}</td>
+                                    <td class="text-dark">{{task.TaskName|title}}</td>
+                                    <td>{{task.Status|title}}</td>
+                                    <td>{{task.Deadline}}</td>
+                                    <td>{{task.TaskDuration}} Day</td>
+                                    <td>{{task.TaskPriority}}</td>
+                                    <td>{{task.Employee.FirstName|upper}}</td>
+                                    <td>
+
+                                        <div class="dropdown">
+                                            <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <img src="{% static 'front-end-static/images/icons/dots.svg' %}"
+                                                    alt="icon">
+                                            </button>
+                                            <ul class="dropdown-menu" style="transition: none;">
+                                                <li><a class="dropdown-item"
+                                                        href=" {% url 'my-tasks' %}/{{task.TaskID}}">View Task</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <h2 class="p-2">Nothing to see here</h2>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const data = '{{course_json}}'
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    console.log(rdata);
+    const local_search = document.getElementById('nav_Search')
+    const course__body = document.getElementById('course__body')
+    let filteredArr = [];
+    local_search.addEventListener('keyup', (e) =>
+    {
+        course__body.innerHTML = ""
+        console.log(filteredArr);
+        filteredArr = rdata.filter((course) => (course['CourseName']).includes(e.target.value))
+        if (filteredArr.length > 0) {
+            filteredArr.map((item) =>
+            {
+                course__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${item.CourseID}</th>
+                                    <td>FNBN 00${item.CourseID}</td>
+                                    <td class="text-dark">${item.CourseName}</td>
+                                    <td>${item.InstructorName}</td>
+                                    <td class="price">{{course.Price}}</td>
+                                    <td>${item.StartDate}</td>
+                                    <td>${item.Duration}</td>
+                                    <td>${item.Location}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                        </td>
+                                </tr>`
+            })
+        }
+    })
+
+    const toggle_search = document.getElementById('toggle_search')
+    const search_toggler = () =>
+    {
+        if (local_search.type == 'hidden') {
+            local_search.type = 'text'
+        } else {
+            local_search.type = 'hidden'
+        }
+    };
+
+</script>
+
+{% endblock content %}

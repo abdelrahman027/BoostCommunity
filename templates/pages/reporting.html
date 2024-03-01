@@ -14,6 +14,17 @@
 <script src="https://www.amcharts.com/lib/4/core.js"></script>
 <script src="https://www.amcharts.com/lib/4/charts.js"></script>
 <script src="https://www.amcharts.com/lib/4/themes/material.js"></script>
+<style>
+    progress[value] {
+        background: #FFA600 !important;
+        color: #FFA600;
+    }
+
+    progress {
+        background: #FFA600 !important;
+
+    }
+</style>
 {% endblock style %}
 
 
@@ -57,9 +68,10 @@ Reporting|Page
                             -->
                         <div class="progress w-100 mt-4 position-relative financial_progress overflow-visible"
                             role="progressbar" aria-label="Example with label" aria-valuenow="25" aria-valuemin="0"
-                            aria-valuemax="100" data_price="{{sales_progress|floatformat:'2'}}">
-                            <div class="target" style="left: 60%"></div>
-                            <div class="progress-bar rounded-start" style="width:25%;">
+                            aria-valuemax="100"
+                            data_price="({{sales_Data.SalesProgress}} %) {{sales_progress|floatformat:'2'}}">
+                            <div class="target progress_target" style="left: 60%"></div>
+                            <div class="progress-bar my_progress_Bar rounded-start" style="background-color: #00314B;">
                             </div>
                         </div>
                     </div>
@@ -136,6 +148,10 @@ Reporting|Page
                         </div>
                     </div>
                 </div>
+
+                {% if employee.user.is_superuser%}
+
+
 
                 <div class="col-xl-6 col-12">
                     <div class="card h-100 p-2">
@@ -249,6 +265,7 @@ Reporting|Page
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xl-6 col-12">
                     <div class="card h-100 p-2">
                         <div class="d-flex justify-content-between">
@@ -259,6 +276,7 @@ Reporting|Page
                         </div>
                     </div>
                 </div>
+                {% endif %}
                 <div class="col-xl-6 col-12">
                     <div class="card h-100 p-2">
                         <div class="d-flex justify-content-between">
@@ -274,7 +292,27 @@ Reporting|Page
                         <div>
                             <div class="highest_reporting_chart">
                                 <div class="chart">
-                                    <svg id="high_report"></svg>
+                                    <div class="">
+                                        <h2>Highest performance Employees</h2>
+                                        {% for perf in PerformanceDes|slice:":3" %}
+                                        <div
+                                            style="display: flex; align-items: center; justify-content:space-evenly; text-align: center; width: 100%;">
+                                            <div style="flex: 1;">
+                                                <img src="{{perf.Employee.EmployeePhoto.url }}" alt="employee"
+                                                    style="width: 60px;">
+                                                <h6>{{perf.Employee}}</h6>
+                                            </div>
+                                            <div class="progress" style="margin-left: 10px;flex: 3;">
+                                                <div class="progress-bar low_progress" role="progressbar"
+                                                    style="width: 25%; background-color: #58508D;" aria-valuenow="25"
+                                                    aria-valuemin="0" aria-valuemax="100">
+                                                    {{perf.TotalPoints}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- <svg id="high_report"></svg> -->
                                 </div>
                             </div>
                         </div>
@@ -295,12 +333,34 @@ Reporting|Page
                         <div>
                             <div class="lowest_reporting_chart">
                                 <div class="chart">
-                                    <svg id="low_report"></svg>
+                                    <div class="">
+                                        <h2>Lowest performance Employees</h2>
+                                        {% for perf in PerformanceAsc|slice:":3" %}
+                                        <div
+                                            style="display: flex; align-items: center; justify-content:space-between; text-align: center; width: 100%;">
+                                            <div style="flex: 1;">
+                                                <img src="{{perf.Employee.EmployeePhoto.url }}" alt="employee"
+                                                    style="width: 60px;">
+                                                <h6>{{perf.Employee|truncatechars:9}}</h6>
+                                            </div>
+                                            <div class="progress" style="margin-left: 10px;flex: 3;">
+                                                <div class="progress-bar low_progress" role="progressbar"
+                                                    style="width: 25%; background-color: #FFA600;" aria-valuenow="25"
+                                                    aria-valuemin="0" aria-valuemax="100">
+                                                    {{perf.TotalPoints}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <!-- <svg id="low_report"></svg> -->
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>
@@ -308,6 +368,30 @@ Reporting|Page
 
 
 <script type="module">
+
+    const progressBar = document.querySelector('.my_progress_Bar')
+    const progressTarget = document.querySelector('.progress_target')
+    const lowProgress = document.querySelectorAll(".low_progress")
+    progressBar.style.width = '{{sales_Data.SalesProgress}}%'
+    // progressBar.style.backgroundColor = '#0ff'
+    progressTarget.style.left = '{{sales_Data.SalesAchievement}}%'
+
+    lowProgress.forEach((prog) =>
+    {
+        let inner = prog.innerHTML.trim()
+        prog.style.width = inner + "%"
+    })
+    console.log(lowProgress[0].innerHTML.trim());
+
+
+    // let attributes = []
+    // financialLow.forEach((element) => (
+    //     attributes.push(element.getAttribute('data_price')))
+    // )
+    // // console.log(financialLow.getAttribute('data_price').split(":")[1].trim())
+    // console.log(attributes[1].split(":")[1].trim())
+
+
     /****************************** Task progress Chart ********************************/
     import "https://code.jquery.com/jquery-3.7.1.min.js";
 
@@ -554,16 +638,36 @@ Reporting|Page
 
 
     /**************************************** highest_reporting_chart ************************/
+    let employeeList = '{{employee_json}}'
+    let rEmployeeList = JSON.parse(employeeList.replace(/&quot;/g, '"'))
     let dataList = '{{PerformanceJson}}';
     let rDataList = JSON.parse(dataList.replace(/&quot;/g, '"'))
-
+    console.log(rEmployeeList)
 
     console.log(rDataList);
-    const lowData = [
-        { id: 1, region: 'USA', value: 12, image: "{% static 'reporting-static/images/employee.jpg' %}" },
-        { id: 2, region: 'China', value: 16, image: "{% static 'reporting-static/images/employee.jpg' %}" },
-        { id: 3, region: 'Germany', value: 10, image: "{% static 'reporting-static/images/employee.jpg' %}" }
-    ];
+
+    let mappedData = rDataList.map((item, i) => (
+        {
+            id: i,
+            region: "USA",
+            value: item.TotalPoints,
+            image: "{% static 'reporting-static/images/employee.jpg' %}"
+        }
+    ))
+
+    const lowData3 = mappedData.slice(-3)
+    console.log(lowData3);
+    const lowData = lowData3
+    // const lowData = [
+    //     { id: 1, region: 'USA', value: 2, image: "{% static 'reporting-static/images/employee.jpg' %}" },
+    //     { id: 2, region: 'China', value: 16, image: "{% static 'reporting-static/images/employee.jpg' %}" },
+    //     { id: 3, region: 'Germany', value: 10, image: "{% static 'reporting-static/images/employee.jpg' %}" },
+    //     { id: 4, region: 'USA', value: 2, image: "{% static 'reporting-static/images/employee.jpg' %}" },
+    //     { id: 5, region: 'China', value: 16, image: "{% static 'reporting-static/images/employee.jpg' %}" },
+    //     { id: 6, region: 'Germany', value: 40, image: "{% static 'reporting-static/images/employee.jpg' %}" }
+    // ];
+
+    console.log(lowData3);
 
     const lowMargins = { horizontal: 20, vertical: 20 };
     const lowChartWidth = 400 - (lowMargins.horizontal * 2);
@@ -652,9 +756,9 @@ Reporting|Page
                 unselectedIds = unselectedIds.filter(id => id !== data.id);
             }
 
-            const newData = lowData.filter(d => !unselectedIds.includes(d.id));
+            // const newData = lowData.filter(d => !unselectedIds.includes(d.id));
 
-            renderLowChart(newData);
+            renderLowChart(lowData);
         });
 
     renderLowChart(lowData);

@@ -8,7 +8,7 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import random
 from .forms import TaskDeliverableForm
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -342,8 +342,8 @@ def reporting(request):
 @login_required
 def employees_tracking(request):
     employee = get_object_or_404(Employee, user=request.user)
-    if 'qe' in request.GET:
-        qe = request.GET['qe']
+    if 'q' in request.GET:
+        qe = request.GET['q']
         employee_list = Employee.objects.filter(
             Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
     else:
@@ -364,12 +364,14 @@ def employees_tracking_detail(request, id):
     overdue_tasks = Task.objects.filter(Employee=selected_employee, Status=3)
     inprogress_tasks = Task.objects.filter(
         Employee=selected_employee, Status=2)
+    inprogress_tasks_all = Task.objects.filter(Status=2)
     if 'qe' in request.GET:
         qe = request.GET['qe']
         employee_list = Employee.objects.filter(
             Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
     else:
         employee_list = Employee.objects.all()
+
         # print(selected_employee.Task_set.all())
 
     context = {
@@ -380,6 +382,60 @@ def employees_tracking_detail(request, id):
         'completed_tasks': completed_tasks,
         'inprogress_tasks': inprogress_tasks,
         'overdue_tasks': overdue_tasks,
+        'inprogress_tasks_all': inprogress_tasks_all,
+
 
     }
     return render(request, 'pages/task_tracking_detail.html', context)
+
+
+@login_required
+def my_tasks(request):
+    employee = get_object_or_404(Employee, user=request.user)
+    completed_tasks = Task.objects.filter(Employee=employee, Status=1)
+    overdue_tasks = Task.objects.filter(Employee=employee, Status=3)
+    inprogress_tasks = Task.objects.filter(
+        Employee=employee, Status=2)
+    if 'q' in request.GET:
+        q = request.GET['q']
+        tasks_list = Task.objects.filter(
+            Q(TaskName__icontains=q), Employee=employee)
+    else:
+        tasks_list = Task.objects.filter(Employee=employee)
+
+    context = {
+        'employee': employee,
+        'tasks': tasks_list,
+        'completed_tasks': completed_tasks,
+        'overdue_tasks': overdue_tasks,
+        'inprogress_tasks': inprogress_tasks,
+
+    }
+    return render(request, 'pages/my_tasks.html', context)
+
+
+def my_tasks_detail(request, id):
+    employee = get_object_or_404(Employee, user=request.user)
+    selected_task = Task.objects.get(pk=id)
+
+    # if 'qe' in request.GET:
+    #     qe = request.GET['qe']
+    #     employee_list = Employee.objects.filter(
+    #         Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
+    # else:
+    #     employee_list = Employee.objects.all()
+
+    #     # print(selected_employee.Task_set.all())
+
+    context = {
+        'employee': employee,
+        'selected_task': selected_task,
+    }
+    return render(request, 'pages/my_task_detail.html', context)
+
+
+def logout_user(request):
+    if request.method == "POST":
+        logout(request)
+        return redirect("login")
+    return render(request, 'pages/logout.html')
