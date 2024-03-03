@@ -91,8 +91,7 @@ def register_user(request):
                 user=user, FirstName=firstname, LastName=lastname,  Email=email)
 
             username = form.cleaned_data.get('username')
-            messages.success(request, f"Account created for {
-                             username}! You can now log in.")
+            messages.success(request, f"Account created for {username}! You can now log in.")
             return redirect('login')
     else:
         form = UserCreationForm()
@@ -116,8 +115,7 @@ def dashboard(request):
     task_progress = random.randint(0, 100)
     target_profit = random.randint(10000, 50000)
     achieved_percentage = random.randint(0, 100)
-    top_employees = [{'name': f'Employee {i}',
-                      'points': random.randint(50, 100)} for i in range(1, 6)]
+    top_employees = [{'name': f'Employee {i}','points': random.randint(50, 100)} for i in range(1, 6)]
     public_courses = [{'name': f'Course {i}', 'revenue': random.randint(
         5000, 20000), 'trainer': f'Trainer {i}'} for i in range(1, 6)]
     departments_data = [{'department': f'Department {i}', 'progress': random.randint(
@@ -196,8 +194,7 @@ def trainer(request):
     employee = get_object_or_404(Employee, user=request.user)
     if 'q' in request.GET:
         q = request.GET['q']
-        trainers_list = Trainer.objects.filter(
-            Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+        trainers_list = Trainer.objects.filter(Q(FirstName__icontains=q) | Q(LastName__icontains=q))
         print(q)
     else:
         trainers_list = Trainer.objects.all()
@@ -217,8 +214,7 @@ def employee(request):
 
     if 'q' in request.GET:
         q = request.GET['q']
-        employee_list = Employee.objects.filter(
-            Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+        employee_list = Employee.objects.filter(Q(FirstName__icontains=q) | Q(LastName__icontains=q))
     else:
         employee_list = Employee.objects.all()
 
@@ -305,18 +301,14 @@ def reporting(request):
     PerformanceDes = Performance.objects.all().order_by("-TotalPoints")
 
     achieved_percentage = random.randint(0, 100)
-    top_employees = [{'name': f'Employee {i}',
-                      'points': random.randint(50, 100)} for i in range(1, 6)]
+    top_employees = [{'name': f'Employee {i}','points': random.randint(50, 100)} for i in range(1, 6)]
     public_courses = [{'name': f'Course {i}', 'revenue': random.randint(
         5000, 20000), 'trainer': f'Trainer {i}'} for i in range(1, 6)]
-    departments_data = [{'department': f'Department {i}', 'progress': random.randint(
-        0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
-    low_performance_employees = [{'name': f'Employee {
-        i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
+    departments_data = [{'department': f'Department {i}', 'progress': random.randint(0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
+    low_performance_employees = [{'name': f'Employee {i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
     sales_Data = Salesman.objects.get(Employee=employee)
-    min_target_value = sales_Data.SalesTarget * \
-        (sales_Data.SalesAchievement)/100
+    min_target_value = sales_Data.SalesTarget * \(sales_Data.SalesAchievement)/100
     min_target = "%.1f" % round(min_target_value, 2)
     sales_progress = sales_Data.SalesTarget * (sales_Data.SalesProgress)/100
 
@@ -344,8 +336,7 @@ def employees_tracking(request):
     employee = get_object_or_404(Employee, user=request.user)
     if 'q' in request.GET:
         qe = request.GET['q']
-        employee_list = Employee.objects.filter(
-            Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
+        employee_list = Employee.objects.filter(Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
     else:
         employee_list = Employee.objects.all()
 
@@ -362,13 +353,11 @@ def employees_tracking_detail(request, id):
     selected_employee = Employee.objects.get(pk=id)
     completed_tasks = Task.objects.filter(Employee=selected_employee, Status=1)
     overdue_tasks = Task.objects.filter(Employee=selected_employee, Status=3)
-    inprogress_tasks = Task.objects.filter(
-        Employee=selected_employee, Status=2)
+    inprogress_tasks = Task.objects.filter(Employee=selected_employee, Status=2)
     inprogress_tasks_all = Task.objects.filter(Status=2)
     if 'qe' in request.GET:
         qe = request.GET['qe']
-        employee_list = Employee.objects.filter(
-            Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
+        employee_list = Employee.objects.filter(Q(FirstName__icontains=qe) | Q(LastName__icontains=qe))
     else:
         employee_list = Employee.objects.all()
 
@@ -394,12 +383,10 @@ def my_tasks(request):
     employee = get_object_or_404(Employee, user=request.user)
     completed_tasks = Task.objects.filter(Employee=employee, Status=1)
     overdue_tasks = Task.objects.filter(Employee=employee, Status=3)
-    inprogress_tasks = Task.objects.filter(
-        Employee=employee, Status=2)
+    inprogress_tasks = Task.objects.filter(Employee=employee, Status=2)
     if 'q' in request.GET:
         q = request.GET['q']
-        tasks_list = Task.objects.filter(
-            Q(TaskName__icontains=q), Employee=employee)
+        tasks_list = Task.objects.filter(Q(TaskName__icontains=q), Employee=employee)
     else:
         tasks_list = Task.objects.filter(Employee=employee)
 
