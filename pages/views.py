@@ -7,12 +7,12 @@ from django.contrib import messages
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 import random
-from .forms import TaskDeliverableForm
+from .forms import TaskDeliverableForm ,CreateActivityForm
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client
+from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client,Activity
 from django.db.models import Sum, Q
 from django.utils import timezone
 from django.core.mail import send_mail
@@ -305,18 +305,13 @@ def reporting(request):
     PerformanceDes = Performance.objects.all().order_by("-TotalPoints")
 
     achieved_percentage = random.randint(0, 100)
-    top_employees = [{'name': f'Employee {i}',
-                      'points': random.randint(50, 100)} for i in range(1, 6)]
-    public_courses = [{'name': f'Course {i}', 'revenue': random.randint(
-        5000, 20000), 'trainer': f'Trainer {i}'} for i in range(1, 6)]
-    departments_data = [{'department': f'Department {i}', 'progress': random.randint(
-        0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
-    low_performance_employees = [{'name': f'Employee {
-        i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
+    top_employees = [{'name': f'Employee {i}','points': random.randint(50, 100)} for i in range(1, 6)]
+    public_courses = [{'name': f'Course {i}', 'revenue': random.randint(5000, 20000), 'trainer':f'Trainer {i}'} for i in range(1, 6)]
+    departments_data = [{'department': f'Department {i}', 'progress': random.randint(0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
+    low_performance_employees = [{'name': f'Employee {i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
     sales_Data = Salesman.objects.get(Employee=employee)
-    min_target_value = sales_Data.SalesTarget * \
-        (sales_Data.SalesAchievement)/100
+    min_target_value = sales_Data.SalesTarget * (sales_Data.SalesAchievement)/100
     min_target = "%.1f" % round(min_target_value, 2)
     sales_progress = sales_Data.SalesTarget * (sales_Data.SalesProgress)/100
 
@@ -398,8 +393,7 @@ def my_tasks(request):
         Employee=employee, Status=2)
     if 'q' in request.GET:
         q = request.GET['q']
-        tasks_list = Task.objects.filter(
-            Q(TaskName__icontains=q), Employee=employee)
+        tasks_list = Task.objects.filter(Q(TaskName__icontains=q), Employee=employee)
     else:
         tasks_list = Task.objects.filter(Employee=employee)
 
@@ -439,3 +433,86 @@ def logout_user(request):
         logout(request)
         return redirect("login")
     return render(request, 'pages/logout.html')
+
+
+#Unfinished for activity
+@login_required
+def my_activity(request):
+    employee = get_object_or_404(Employee, user=request.user)
+    activity_logs = Activity.objects.filter(Employee=employee)
+
+    # if 'q' in request.GET:
+    #     q = request.GET['q']
+    #     clients_list = Client.objects.filter(
+    #         Q(FirstName__icontains=q) | Q(LastName__icontains=q))
+    #     print(q)
+    # else:
+    #     clients_list = Client.objects.all()
+
+    context = {
+        # 'clients': clients_list,
+        'employee': employee,
+        'activities':activity_logs,
+        # 'client_json': json.dumps(list(Client.objects.values())),
+    }
+    return render(request, 'pages/activity-log.html', context)
+
+
+
+@login_required
+def create_activity(request):
+    employee = get_object_or_404(Employee, user=request.user)
+
+
+
+    if request.method == 'POST':
+        if len(request.POST['ActivityName'].strip()) > 0:
+            activity_name = request.POST['ActivityName']
+            activity_desc = request.POST['Description']
+            activity_project = request.POST['Project']
+            activity_time = request.POST['DoneDate']
+            Activity.objects.create(ActivityName=activity_name,Description=activity_desc,Project=activity_project,DoneDate=activity_time,Employee=employee)
+        return redirect('my-activity')
+    context= {
+    'employee':employee,
+        }
+    return render(request,'pages/add-activity.html',context)
+
+
+@login_required
+def update_activity(request,id):
+    employee = get_object_or_404(Employee, user=request.user)
+    selected_activity = Activity.objects.get(pk=id)
+
+    if request.method == 'POST':
+        if len(request.POST['ActivityName'].strip()) > 0:
+            activity_name = request.POST['ActivityName']
+            activity_desc = request.POST['Description']
+            activity_project = request.POST['Project']
+            activity_time = request.POST['DoneDate']
+            Activity.objects.filter(pk=id).update(ActivityName=activity_name,Description=activity_desc,Project=activity_project,DoneDate=activity_time,Employee=employee)
+        return redirect('my-activity')
+    context ={
+        "employee":employee,
+        'selected_activity':selected_activity
+    }
+    return render(request,'pages/update-activity.html',context)
+
+
+
+@login_required
+def delete_activity(request,id):
+    Activity.objects.filter(pk=id).delete()
+    return redirect('my-activity')
+
+
+@login_required
+def activity_detail(request,id):
+    employee = get_object_or_404(Employee, user=request.user)
+    selected_activity = Activity.objects.get(pk=id)
+
+    context ={
+        "employee":employee,
+        'selected_activity':selected_activity
+    }
+    return render(request,'pages/activity-detail.html',context)

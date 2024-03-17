@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client
+from .models import Department, JobTitle, Employee, Status, Task, TaskProgress, Performance, Badge, Salesman, Trainer, Course, SalesmanCourseAssignment, TrainerCourseAssignment, EmployeeBadge, Meeting, TaskQualityRating, EmployeeSkill, TaskDeliverable, Client ,Activity
 
 from django.http import HttpResponse
 from import_export.admin import ImportExportModelAdmin
@@ -220,6 +220,14 @@ class ClientAdmin(ImportExportModelAdmin, ExportExcelMixin, ExportWordMixin):
     list_display_links = ['FirstName', 'LastName']
 
 
+class ActivityAdmin(ImportExportModelAdmin, ExportExcelMixin, ExportWordMixin):
+    list_display = ('ActivityID', 'Employee', 'Project','ActivityName', 'Description')
+    search_fields = ['Employee', 'Project', 'ActivityName']
+    list_filter = ['Project', 'Employee',]
+    list_editable = ['Project']
+    list_display_links = ['ActivityName']
+
+
 # Register your models with the customized admin classes
 admin.site.register(EmployeeBadge, EmployeeBadgeAdmin)
 admin.site.register(Meeting, MeetingAdmin)
@@ -240,5 +248,7 @@ admin.site.register(TaskProgress, TaskProgressAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Badge, BadgeAdmin)
 admin.site.register(Client, ClientAdmin)
+admin.site.register(Activity, ActivityAdmin)
+
 admin.site.site_header = "Boost Community"
 admin.site.site_title = "Boost Community"

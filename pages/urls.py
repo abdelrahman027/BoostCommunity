@@ -23,6 +23,17 @@ urlpatterns = [
     path('employee_profile/my-tasks', views.my_tasks, name='my-tasks'),
     path('employee_profile/my-tasks/<int:id>',
          views.my_tasks_detail, name='my-tasks-detail'),
+     # activity
+    path('employee_profile/my-activity', views.my_activity, name='my-activity'),
+    path('employee_profile/my-activity/add-activity', views.create_activity, name='add-activity'),
+    path('employee_profile/my-activity/add-activity/<int:id>', views.update_activity, name='update-activity'),
+
+    path('employee_profile/my-activity/<int:id>', views.delete_activity, name='delete-activity'),
+
+    path('employee_profile/my-activity/detail/<int:id>', views.activity_detail, name='my-activity-detail'),
+
+
+
     path('logout',
          views.logout_user, name='logout'),
 

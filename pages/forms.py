@@ -3,7 +3,7 @@ from django import forms
 from .models import TaskDeliverable
 
 from django.forms import ModelForm
-from .models import Task
+from .models import Task,Activity
 
 
 class TaskDeliverableForm(forms.ModelForm):
@@ -45,3 +45,10 @@ class TaskDeliverableForm(forms.ModelForm):
     # Deadline = models.DateField()
     # TaskDuration = models.IntegerField()
     # TaskPriority = models.CharField(max_length=10)
+
+
+class CreateActivityForm(forms.ModelForm):
+    
+    class Meta:
+        model=Activity
+        fields=['ActivityName','Description','Project','DoneDate']

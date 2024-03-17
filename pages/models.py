@@ -239,3 +239,14 @@ class Client(models.Model):
 
     def __str__(self):
         return self.FirstName
+    
+class Activity(models.Model):
+    ActivityID = models.AutoField(primary_key=True)
+    Employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    ActivityName = models.CharField(max_length=255)
+    Description = models.TextField(default="default description", null=True)
+    Project = models.CharField(max_length=20 ,null=True,blank=True)
+    DoneDate = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.ActivityName
