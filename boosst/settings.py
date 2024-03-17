@@ -31,7 +31,7 @@ DEBUG = getenv("IS_PRODUCTION", True)
 
 ALLOWED_HOSTS = [
     # getenv("APP_HOST")
-    getenv('APP_HOST'),'127.0.0.1','127.0.0.1:8083','community.boostuae.com'
+    getenv('APP_HOST'),'127.0.0.1','127.0.0.1:8083','community.boostuae.com','localhost'
 ]
 
 CSRF_TRUSTED_ORIGINS =['https://community.boostuae.com']
@@ -42,7 +42,6 @@ CSRF_TRUSTED_ORIGINS =['https://community.boostuae.com']
 INSTALLED_APPS = [
     "admin_interface",
     "colorfield",
-    'bootstrap5',
     "pages.apps.PagesConfig",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -51,7 +50,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "import_export",
-    'chartjs',
 ]
 
 MIDDLEWARE = [
