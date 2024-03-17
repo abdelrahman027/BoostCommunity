@@ -826,7 +826,7 @@ def reporting(request):
     low_performance_employees = [{'name': f'Employee {i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
     sales_Data = Salesman.objects.get(Employee=employee)
-    min_target_value = sales_Data.SalesTarget * \(sales_Data.SalesAchievement)/100
+    min_target_value = sales_Data.SalesTarget * (sales_Data.SalesAchievement)/100
     min_target = "%.1f" % round(min_target_value, 2)
     sales_progress = sales_Data.SalesTarget * (sales_Data.SalesProgress)/100
 
