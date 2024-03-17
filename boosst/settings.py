@@ -31,7 +31,10 @@ DEBUG = getenv("IS_PRODUCTION", True)
 
 ALLOWED_HOSTS = [
     # getenv("APP_HOST")
+    getenv('APP_HOST'),'127.0.0.1','127.0.0.1:8083','community.boostuae.com'
 ]
+
+CSRF_TRUSTED_ORIGINS =['https://community.boostuae.com']
 
 
 # Application definition
