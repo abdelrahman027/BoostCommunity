@@ -18,6 +18,33 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
+#chat bot
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer,ChatterBotCorpusTrainer
+
+bot =ChatBot('boostcommunity',readonly=False,logic_adapters=[
+    {
+        'import_path':'chatterbot.logic.BestMatch',
+        # 'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
+        # 'maximum_similarity_threshold':0.90
+    }
+    ])
+ChatterBotCorpusTrainer = ChatterBotCorpusTrainer(bot)
+ChatterBotCorpusTrainer.train('chatterbot.corpus.english')
+
+conversation = [
+    "Hello",
+    "Hi there!",
+    "What is your name ?",
+    "My name is BoostCommunity",
+    "How are you doing?",
+    "I'm doing great.",
+    "That is good to hear",
+    "Thank you.",
+    "You're welcome."
+]
+# trainer = ListTrainer(bot)
+# trainer.train(conversation)
 # Create your views here.
 
 
@@ -91,8 +118,7 @@ def register_user(request):
                 user=user, FirstName=firstname, LastName=lastname,  Email=email)
 
             username = form.cleaned_data.get('username')
-            messages.success(request, f"Account created for {
-                             username}! You can now log in.")
+            messages.success(request, f"Account created for {username}! You can now log in.")
             return redirect('login')
     else:
         form = UserCreationForm()
@@ -116,14 +142,12 @@ def dashboard(request):
     task_progress = random.randint(0, 100)
     target_profit = random.randint(10000, 50000)
     achieved_percentage = random.randint(0, 100)
-    top_employees = [{'name': f'Employee {i}',
-                      'points': random.randint(50, 100)} for i in range(1, 6)]
+    top_employees = [{'name': f'Employee {i}','points': random.randint(50, 100)} for i in range(1, 6)]
     public_courses = [{'name': f'Course {i}', 'revenue': random.randint(
         5000, 20000), 'trainer': f'Trainer {i}'} for i in range(1, 6)]
     departments_data = [{'department': f'Department {i}', 'progress': random.randint(
         0, 100), 'employees': random.randint(5, 20)} for i in range(1, 6)]
-    low_performance_employees = [{'name': f'Employee {
-        i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
+    low_performance_employees = [{'name': f'Employee {i}', 'points': random.randint(0, 49)} for i in range(1, 6)]
 
     context = {
         'task_progress': task_progress,
@@ -517,3 +541,22 @@ def activity_detail(request,id):
     }
     return render(request,'pages/activity-detail.html',context)
 
+# AI Chat Bot
+
+@login_required
+def ai_assistant(request):
+    employee = get_object_or_404(Employee, user=request.user)
+
+
+    context={
+        "employee":employee
+    }
+    return render(request,'pages/ai-assistant.html',context)
+
+
+@login_required
+def getResponse(request):
+    userMessage = request.GET.get('userMessage')
+    chatResponse = str(bot.get_response(userMessage))
+    print(chatResponse)
+    return HttpResponse(chatResponse)

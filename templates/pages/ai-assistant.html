@@ -1,0 +1,121 @@
+{% extends 'base_custom.html' %}
+{% load static %}
+
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'front-end-static/css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'front-end-static/css/style.min.css' %}">
+<style>
+    #chatbot {
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        margin-top: 50px;
+        border-radius: 10px;
+        border: 1px solid gray;
+        padding: 10px;
+        height: 300px;
+        overflow: auto;
+    }
+
+    .botText {
+        font-family: monospace;
+        font-size: 18px;
+        text-align: left;
+        line-height: 25px;
+        color: rgb(109, 111, 109);
+    }
+
+    #userInput {
+        margin-left: auto;
+        margin-right: auto;
+        width: 70%;
+        margin-top: 40px;
+        text-align: center;
+    }
+
+    #textInput {
+        border: 3px solid white;
+        border-bottom: 3px solid #00314B;
+        font-family: monospace;
+        font-size: 18px;
+        width: 60%;
+        padding: 16px;
+        color: #FFA600;
+    }
+
+    #textInput:focus {
+        outline: none;
+    }
+
+    .userText {
+        text-align: right;
+        font-family: monospace;
+        font-size: 18px;
+        line-height: 25px;
+        color: rgb(109, 111, 109);
+    }
+</style>
+{% endblock style %}
+
+
+{% block title %}
+AI Assistant | Page
+{% endblock title %}
+
+
+
+{% block content %}
+{% include 'parts/navbar.html' %}
+<div class="row m-0">
+    {% include 'parts/side_nav.html' %}
+    <div class="col-9 employees_content mt-4 offset_left" id="side_content">
+        <h3 class="text-capitalize my-2">Boost Community Chatbot</h3>
+        <div>
+            <div id="chatbot">
+                <p class="botText">Hi ,My name is BoostCommunity and iam your virtual assistant. </p>
+            </div>
+            <div id="userInput">
+                <input type="text" id="textInput" name="userMessage" placeholder="Type your message...">
+
+                <button type="submit" id="buttonInput" class="btn btn-info text-white mt-3">
+                    <span>
+                        Send
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- JAVASCRIPT LOGIC @@@@@@@ -->
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+    crossorigin="anonymous"></script>
+
+<script>
+
+    console.log('/{% url "getResponse" %}');
+
+    function getUserResponse()
+    {
+        var userText = $('#textInput').val();
+        var userHTML = `<p class='userText'>{{employee.FirstName}}: <span>${userText}</span></p>`;
+        $("#textInput").val("");
+        $('#chatbot').append(userHTML);
+
+        $.get('{% url "getResponse" %}', { userMessage: userText }).done((data) =>
+        {
+            var returnedMessage = `<p class='botText'>BoostCommunity: <span>
+                ${data}</span></p>`
+            $('#chatbot').append(returnedMessage)
+        })
+    };
+
+
+    $('#buttonInput').click(() =>
+    {
+        getUserResponse();
+    })
+</script>
+{% endblock content %}

@@ -31,8 +31,13 @@ urlpatterns = [
     path('employee_profile/my-activity/<int:id>', views.delete_activity, name='delete-activity'),
 
     path('employee_profile/my-activity/detail/<int:id>', views.activity_detail, name='my-activity-detail'),
+     
+     #chatbot
+      path('employee_profile/ai-assistant', views.ai_assistant, name='ai-assistant'),
 
+      path('getResponse',views.getResponse,name='getResponse'),
 
+     # logout
 
     path('logout',
          views.logout_user, name='logout'),
