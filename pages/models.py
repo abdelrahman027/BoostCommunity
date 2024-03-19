@@ -129,6 +129,8 @@ class Trainer(models.Model):
     Phone = models.CharField(max_length=20)
     Qualifications = models.TextField()
     Certificates = models.TextField()
+    Location = models.TextField(default='EGY')
+    Price = models.IntegerField(default=50)
 
     def __str__(self):
         return self.FirstName

@@ -50,14 +50,23 @@ Trainers|Page
                         </button>
                     </div>
                     <!-- SORTING TOGGLE -->
-                    <button type="button" class="btn btn-outline-dark" onclick="sort_toggler()">
+                    <button type="button" id="sortBtn" class="btn btn-outline-dark">
                         <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon" alt="icon">
                     </button>
                     <!-- FILTER TOGGLE -->
-                    <button type="button" class="btn btn-outline-dark">
-                        <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
-                            alt="icon">
-                    </button>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-dark" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                                alt="icon">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" style="border: none;" id="nameFilter">Name</button></li>
+                            <li><button class="dropdown-item" style="border: none;" id="priceFilter">Price</button></li>
+                            <li><button class="dropdown-item" style="border: none;"
+                                    id="locationFilter">Location</button></li>
+                        </ul>
+                    </div>
                 </div>
                 <!-- HIDDEN SEARCH INPUT HERE -->
                 <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
@@ -93,8 +102,8 @@ Trainers|Page
                                     <td>{{trainer.Qualifications}}</td>
                                     <td>{{trainer.Certificates}}</td>
                                     <td>{{trainer.Phone}}</td>
-                                    <td>KSA</td>
-                                    <td class="price">50</td>
+                                    <td>{{trainer.Location}}</td>
+                                    <td class="price">{{trainer.Price}}</td>
                                     <td>
                                         <div
                                             class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
@@ -146,8 +155,8 @@ Trainers|Page
                                     <td>{{trainer.Qualifications}}</td>
                                     <td>{{trainer.Certificates}}</td>
                                     <td>{{trainer.Phone}}</td>
-                                    <td>KSA</td>
-                                    <td class="price">50</td>
+                                    <td>{{trainer.Location}}</td>
+                                    <td class="price">{{trainer.Price}}</td>
                                     <td>
                                         <div
                                             class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
@@ -174,14 +183,23 @@ Trainers|Page
 
 <!-- JAVASCRIPT LOGIC @@@@@@@ -->
 <script>
+
+    let sortAsc = false;
+    let trainerName = true;
+    let trainerPrice = false;
+    let trainerLocation = false;
+
     const data = '{{trainer_json}}'
     console.log(data)
     // #trainer__body
     //#global_nav_search
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-
+    const nameFilter = document.getElementById('nameFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const locationFilter = document.getElementById('locationFilter');
     const local_search = document.getElementById('nav_Search')
     const trainer__body = document.getElementById('trainer__body')
+    const sortBtn = document.getElementById('sortBtn')
     console.log(local_search);
 
     local_search.addEventListener('keyup', (e) =>
@@ -202,8 +220,8 @@ Trainers|Page
                                     <td>${item.Qualifications}</td>
                                     <td>${item.Certificates}</td>
                                     <td>${item.Phone}</td>
-                                    <td>KSA</td>
-                                    <td class="price">50</td>
+                                    <td>${item.Location}</td>
+                                    <td class="price">${item.Price}</td>
                                     <td>
                                         <div
                                             class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
@@ -219,7 +237,101 @@ Trainers|Page
             })
         }
     })
+    // filter toggles
+    trainerName ? nameFilter.style.color = 'green' : 'black'
+    trainerPrice ? priceFilter.style.color = 'green' : 'black'
+    trainerLocation ? locationFilter.style.color = 'green' : 'black'
+    nameFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'green'
+        priceFilter.style.color = 'black'
+        locationFilter.style.color = 'black'
+        trainerName = true
+        trainerPrice = false
+        trainerLocation = false
+    })
+    priceFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        priceFilter.style.color = 'green'
+        locationFilter.style.color = 'black'
+        trainerName = false
+        trainerPrice = true
+        trainerLocation = false
+    })
+    locationFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        priceFilter.style.color = 'black'
+        locationFilter.style.color = 'green'
+        trainerName = false
+        trainerPrice = false
+        trainerLocation = true
+    })
 
+
+
+    //sort filter
+    sortBtn.addEventListener('click', () =>
+    {
+        trainer__body.innerHTML = ""
+        sortAsc = !sortAsc
+        //name conditions
+        if (sortAsc && trainerName) {
+
+            rdataSorted = rdata.sort((a, b) => a.FirstName.toLowerCase().localeCompare(b.FirstName.toLowerCase())
+            );
+        } else if (!sortAsc && trainerName) {
+
+            rdataSorted = rdata.sort((a, b) => b.FirstName.toLowerCase().localeCompare(a.FirstName.toLowerCase()));
+        }
+        //price conditions
+
+        else if (sortAsc && trainerPrice) {
+
+            rdataSorted = rdata.sort((a, b) => b.Price - a.Price);
+        } else if (!sortAsc && trainerPrice) {
+
+            rdataSorted = rdata.sort((a, b) => a.Price - b.Price);
+        }
+        //location condition
+        if (sortAsc && trainerLocation) {
+            rdataSorted = rdata.sort((a, b) => b.Location - a.Location);
+        } else if (!sortAsc && trainerLocation) {
+            rdataSorted = rdata.sort((a, b) => a.Location - b.Location);
+
+        }
+
+        rdataSorted.map((item) =>
+        {
+            trainer__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${item.TrainerID}</th>
+                                    <td class="text-dark">
+                                        <img src="{% static 'front-end-static/images/instructor.jpg' %}"
+                                            class="trainer_image" alt="trainer image">
+                                            ${item.FirstName} ${item.LastName}
+                                    </td>
+                                    <td>${item.Qualifications}</td>
+                                    <td>${item.Certificates}</td>
+                                    <td>${item.Phone}</td>
+                                    <td>${item.Location}</td>
+                                    <td class="price">${item.Price}</td>
+                                    <td>
+                                        <div
+                                            class="default_counter rounded-pill bg-secondary d-flex align-items-center justify-content-center">
+                                            <img class="icon m-1"
+                                                src="{% static 'front-end-static/images/icons/fox.svg' %}" alt="icon">
+                                            <span>14/18</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                    </td>
+                                </tr>`
+        })
+        console.log(rdataSorted);
+    })
+    //end sort filter
 
     const toggle_search = document.getElementById('toggle_search')
     const search_toggler = () =>

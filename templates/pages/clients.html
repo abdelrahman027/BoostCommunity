@@ -52,13 +52,23 @@ Clients|Page
                                 alt="icon">
                         </button>
                     </div>
-                    <button type="button" class="btn btn-outline-dark">
+                    <button type="button" id="sortBtn" class="btn btn-outline-dark">
                         <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon" alt="icon">
                     </button>
-                    <button type="button" class="btn btn-outline-dark">
-                        <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
-                            alt="icon">
-                    </button>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-dark" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                                alt="icon">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" style="border: none;" id="nameFilter">Name</button></li>
+                            <li><button class="dropdown-item" style="border: none;" id="companyFilter">Company</button>
+                            </li>
+                            <li><button class="dropdown-item" style="border: none;"
+                                    id="locationFilter">Location</button></li>
+                        </ul>
+                    </div>
                 </div>
                 <!-- HIDDEN SEARCH INPUT HERE -->
                 <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
@@ -150,12 +160,28 @@ Clients|Page
 </div>
 
 <script>
+
+    let rdataSorted;
+    //sort function
+
+    let sortAsc = false;
+    let clientName = true;
+    let clientCompany = false;
+    let clientLocation = false;
+    //end sort function
+
+
+
     const data = '{{client_json}}'
     console.log(data);
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
     console.log(rdata);
     const local_search = document.getElementById('nav_Search')
     const client__body = document.getElementById('client__body')
+    const nameFilter = document.getElementById('nameFilter');
+    const companyFilter = document.getElementById('companyFilter');
+    const locationFilter = document.getElementById('locationFilter')
+    const sortBtn = document.getElementById('sortBtn');
 
 
     let filteredArr = []
@@ -184,6 +210,93 @@ Clients|Page
             })
         }
     })
+
+    //filter toggles
+    clientName ? nameFilter.style.color = 'green' : 'black'
+    clientCompany ? companyFilter.style.color = 'green' : 'black'
+    clientLocation ? locationFilter.style.color = 'green' : 'black'
+    nameFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'green'
+        companyFilter.style.color = 'black'
+        locationFilter.style.color = 'black'
+        clientName = true
+        clientCompany = false
+        clientLocation = false
+    })
+    companyFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        companyFilter.style.color = 'green'
+        locationFilter.style.color = 'black'
+        clientName = false
+        clientCompany = true
+        clientLocation = false
+    })
+    locationFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        companyFilter.style.color = 'black'
+        locationFilter.style.color = 'green'
+        clientName = false
+        clientCompany = false
+        clientLocation = true
+    })
+
+    //sort filter
+    sortBtn.addEventListener('click', () =>
+    {
+        client__body.innerHTML = ""
+        sortAsc = !sortAsc
+        //name conditions
+        if (sortAsc && clientName) {
+
+            rdataSorted = rdata.sort((a, b) => a.FirstName.toLowerCase().localeCompare(b.FirstName.toLowerCase())
+            );
+        } else if (!sortAsc && clientName) {
+
+            rdataSorted = rdata.sort((a, b) => b.FirstName.toLowerCase().localeCompare(a.FirstName.toLowerCase()));
+        }
+        //price conditions
+
+        else if (sortAsc && clientCompany) {
+
+            rdataSorted = rdata.sort((a, b) => a.Company.toLowerCase().localeCompare(b.Company.toLowerCase())
+            );
+        } else if (!sortAsc && clientCompany) {
+
+            rdataSorted = rdata.sort((a, b) => b.Company.toLowerCase().localeCompare(a.Company.toLowerCase()));
+        }
+        //location condition
+        if (sortAsc && clientLocation) {
+            rdataSorted = rdata.sort((a, b) => a.Location.toLowerCase().localeCompare(b.Location.toLowerCase())
+            );
+        } else if (!sortAsc && clientLocation) {
+            rdataSorted = rdata.sort((a, b) => b.Location.toLowerCase().localeCompare(a.Location.toLowerCase()));
+        }
+        rdataSorted.map((client) =>
+        {
+            client__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${client.ClientID}</th>
+                                    <td class="text-dark">
+                                        <img src="{% static 'front-end-static/images/instructor.jpg' %}"
+                                            class="trainer_image" alt="trainer image">
+                                        ${client.FirstName} ${client.LastName}
+                                    </td>
+                                    <td>${client.Project}</td>
+                                    <td>${client.Company}</td>
+                                    <td>${client.Location.toUpperCase()}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                    </td>
+                                </tr>`
+        })
+        console.log(rdataSorted);
+    })
+    //end sort filter
+
+
+
     const toggle_search = document.getElementById('toggle_search')
     const search_toggler = () =>
     {

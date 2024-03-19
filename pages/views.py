@@ -25,12 +25,12 @@ from chatterbot.trainers import ListTrainer,ChatterBotCorpusTrainer
 bot =ChatBot('boostcommunity',readonly=False,logic_adapters=[
     {
         'import_path':'chatterbot.logic.BestMatch',
-        # 'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
-        # 'maximum_similarity_threshold':0.90
+        'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
+        'maximum_similarity_threshold':0.90
     }
     ])
-ChatterBotCorpusTrainer = ChatterBotCorpusTrainer(bot)
-ChatterBotCorpusTrainer.train('chatterbot.corpus.english')
+# ChatterBotCorpusTrainer = ChatterBotCorpusTrainer(bot)
+# ChatterBotCorpusTrainer.train('chatterbot.corpus.english')
 
 conversation = [
     "Hello",
@@ -43,8 +43,8 @@ conversation = [
     "Thank you.",
     "You're welcome."
 ]
-# trainer = ListTrainer(bot)
-# trainer.train(conversation)
+trainer = ListTrainer(bot)
+trainer.train(conversation)
 # Create your views here.
 
 

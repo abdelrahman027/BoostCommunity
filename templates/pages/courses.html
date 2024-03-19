@@ -48,13 +48,22 @@ Courses|Page
                                 alt="icon">
                         </button>
                     </div>
-                    <button type="button" class="btn btn-outline-dark">
+                    <button type="button" id="sortBtn" class="btn btn-outline-dark">
                         <img src="{% static 'front-end-static/images/icons/table/sort.svg' %}" class="icon" alt="icon">
                     </button>
-                    <button type="button" class="btn btn-outline-dark">
-                        <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
-                            alt="icon">
-                    </button>
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-dark" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="{% static 'front-end-static/images/icons/table/filter.svg' %}" class="icon"
+                                alt="icon">
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><button class="dropdown-item" style="border: none;" id="nameFilter">Name</button></li>
+                            <li><button class="dropdown-item" style="border: none;" id="priceFilter">Price</button></li>
+                            <li><button class="dropdown-item" style="border: none;"
+                                    id="locationFilter">Location</button></li>
+                        </ul>
+                    </div>
                 </div>
                 <input type="hidden" id="nav_Search" class="form-control mt-3" placeholder="Search...">
             </div>
@@ -164,11 +173,29 @@ Courses|Page
 </div>
 
 <script>
+
+
+    let rdataSorted;
+    //sort function
+
+    let sortAsc = false;
+    let courseName = true;
+    let coursePrice = false;
+    let courseLocation = false;
+    //end sort function
+
+    //live search
     const data = '{{course_json}}'
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-    console.log(rdata);
-    const local_search = document.getElementById('nav_Search')
-    const course__body = document.getElementById('course__body')
+    const nameFilter = document.getElementById('nameFilter');
+    const priceFilter = document.getElementById('priceFilter');
+    const locationFilter = document.getElementById('locationFilter')
+    console.log(rdataSorted);
+    // console.log(rdata.sort((a, b) => b.Price - a.Price));
+
+    const local_search = document.getElementById('nav_Search');
+    const course__body = document.getElementById('course__body');
+    const sortBtn = document.getElementById('sortBtn');
     let filteredArr = [];
     local_search.addEventListener('keyup', (e) =>
     {
@@ -183,7 +210,7 @@ Courses|Page
                                     <td>FNBN 00${item.CourseID}</td>
                                     <td class="text-dark">${item.CourseName}</td>
                                     <td>${item.InstructorName}</td>
-                                    <td class="price">{{course.Price}}</td>
+                                    <td class="price">${item.Price}</td>
                                     <td>${item.StartDate}</td>
                                     <td>${item.Duration}</td>
                                     <td>${item.Location}</td>
@@ -194,7 +221,92 @@ Courses|Page
             })
         }
     })
+    //end live search
 
+    //filter toggles
+    courseName ? nameFilter.style.color = 'green' : 'black'
+    coursePrice ? priceFilter.style.color = 'green' : 'black'
+    courseLocation ? locationFilter.style.color = 'green' : 'black'
+    nameFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'green'
+        priceFilter.style.color = 'black'
+        locationFilter.style.color = 'black'
+        courseName = true
+        coursePrice = false
+        courseLocation = false
+    })
+    priceFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        priceFilter.style.color = 'green'
+        locationFilter.style.color = 'black'
+        courseName = false
+        coursePrice = true
+        courseLocation = false
+    })
+    locationFilter.addEventListener('click', () =>
+    {
+        nameFilter.style.color = 'black'
+        priceFilter.style.color = 'black'
+        locationFilter.style.color = 'green'
+        courseName = false
+        coursePrice = false
+        courseLocation = true
+    })
+
+
+    //sort filter
+    sortBtn.addEventListener('click', () =>
+    {
+        course__body.innerHTML = ""
+        sortAsc = !sortAsc
+        //name conditions
+        if (sortAsc && courseName) {
+
+            rdataSorted = rdata.sort((a, b) => a.CourseName.toLowerCase().localeCompare(b.CourseName.toLowerCase())
+            );
+        } else if (!sortAsc && courseName) {
+
+            rdataSorted = rdata.sort((a, b) => b.CourseName.toLowerCase().localeCompare(a.CourseName.toLowerCase()));
+        }
+        //price conditions
+
+        else if (sortAsc && coursePrice) {
+
+            rdataSorted = rdata.sort((a, b) => b.Price - a.Price);
+        } else if (!sortAsc && coursePrice) {
+
+            rdataSorted = rdata.sort((a, b) => a.Price - b.Price);
+        }
+        //location condition
+        if (sortAsc && courseLocation) {
+            rdataSorted = rdata.sort((a, b) => a.Location.toLowerCase().localeCompare(b.Location.toLowerCase())
+            );
+        } else if (!sortAsc && courseLocation) {
+            rdataSorted = rdata.sort((a, b) => b.Location.toLowerCase().localeCompare(a.Location.toLowerCase()));
+        }
+        rdataSorted.map((item) =>
+        {
+            course__body.innerHTML += `<tr class="align-middle">
+                                    <th scope="row">${item.CourseID}</th>
+                                    <td>FNBN 00${item.CourseID}</td>
+                                    <td class="text-dark">${item.CourseName}</td>
+                                    <td>${item.InstructorName}</td>
+                                    <td class="price">${item.Price}</td>
+                                    <td>${item.StartDate}</td>
+                                    <td>${item.Duration}</td>
+                                    <td>${item.Location}</td>
+                                    <td>
+                                        <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon">
+                                        </td>
+                                </tr>`
+        })
+        console.log(rdataSorted);
+    })
+    //end sort filter
+
+    //search toggler
     const toggle_search = document.getElementById('toggle_search')
     const search_toggler = () =>
     {
@@ -204,6 +316,8 @@ Courses|Page
             local_search.type = 'hidden'
         }
     };
+    // end search toggler
+
 
 </script>
 
