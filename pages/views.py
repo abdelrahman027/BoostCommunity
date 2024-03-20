@@ -18,6 +18,7 @@ from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
+from .chatbotTrain import conversation
 #chat bot
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer,ChatterBotCorpusTrainer
@@ -26,23 +27,12 @@ bot =ChatBot('boostcommunity',readonly=False,logic_adapters=[
     {
         'import_path':'chatterbot.logic.BestMatch',
         'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
-        'maximum_similarity_threshold':0.90
+        'maximum_similarity_threshold':0.95
     }
     ])
 # ChatterBotCorpusTrainer = ChatterBotCorpusTrainer(bot)
 # ChatterBotCorpusTrainer.train('chatterbot.corpus.english')
 
-conversation = [
-    "Hello",
-    "Hi there!",
-    "What is your name ?",
-    "My name is BoostCommunity",
-    "How are you doing?",
-    "I'm doing great.",
-    "That is good to hear",
-    "Thank you.",
-    "You're welcome."
-]
 trainer = ListTrainer(bot)
 trainer.train(conversation)
 # Create your views here.
