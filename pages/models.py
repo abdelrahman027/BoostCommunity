@@ -134,8 +134,7 @@ class Trainer(models.Model):
     Certificate3 = models.FileField(null=True,blank=True,upload_to='pdf')
     Location = models.TextField(default='EGY',max_length=20)
     Comments = models.TextField(null=True,blank=True)
-
-    PricePerHour = models.IntegerField(default=50)
+    rates = models.IntegerField(default=50)
 
     def __str__(self):
         return self.FirstName
