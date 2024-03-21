@@ -230,9 +230,9 @@ My Tasks|Page
 </div>
 
 <script>
-    const data = '{{course_json}}'
+    const data = '{{tasks_json}}'
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-    console.log(rdata);
+    console.log(rdata); //DATA@@@
     const local_search = document.getElementById('nav_Search')
     const course__body = document.getElementById('course__body')
     let filteredArr = [];

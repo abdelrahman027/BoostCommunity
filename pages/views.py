@@ -417,7 +417,7 @@ def my_tasks(request):
         'completed_tasks': completed_tasks,
         'overdue_tasks': overdue_tasks,
         'inprogress_tasks': inprogress_tasks,
-
+        'tasks_json': json.dumps(list(Task.objects.values()), sort_keys=True, default=str),
     }
     return render(request, 'pages/my_tasks.html', context)
 
@@ -467,7 +467,7 @@ def my_activity(request):
         # 'clients': clients_list,
         'employee': employee,
         'activities':activity_logs,
-        # 'client_json': json.dumps(list(Client.objects.values())),
+        'activity_json': json.dumps(list(Activity.objects.values()), sort_keys=True, default=str),
     }
     return render(request, 'pages/activity-log.html', context)
 

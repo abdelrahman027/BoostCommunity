@@ -118,6 +118,10 @@ Employees|Page
 </div>
 
 <script>
+    let data = "{{activity_json}}"
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
+    console.log(rdata); //DATA@@@@
+
     let sortAsc = false;
     let employeeName = true;
     const nameFilter = document.getElementById('nameFilter');
@@ -128,12 +132,14 @@ Employees|Page
     employeeName ? nameFilter.style.color = 'green' : 'black'
 
 
-    nameFilter.addEventListener('click', () => {
+    nameFilter.addEventListener('click', () =>
+    {
         nameFilter.style.color = 'green'
         employeeName = true
     })
 
-    sortBtn.addEventListener('click', () => {
+    sortBtn.addEventListener('click', () =>
+    {
         course__body.innerHTML = ""
         sortAsc = !sortAsc
         //name conditions
@@ -184,9 +190,9 @@ Employees|Page
         // })
     })
 
-    const data = '{{client_json}}'
+    // const data = '{{client_json}}'
 
-    console.log(data);
+    // console.log(data);
     //end sort filter
 
 </script>
