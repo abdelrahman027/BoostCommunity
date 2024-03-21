@@ -35,7 +35,7 @@ urlpatterns = [
      #chatbot
       path('employee_profile/ai-assistant', views.ai_assistant, name='ai-assistant'),
 
-      path('getResponse',views.getResponse,name='getResponse'),
+     #  path('getResponse',views.getResponse,name='getResponse'),
 
      # logout
 

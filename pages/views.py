@@ -20,21 +20,21 @@ from django.conf import settings
 from datetime import datetime
 from .chatbotTrain import conversation
 #chat bot
-from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer,ChatterBotCorpusTrainer
+# from chatterbot import ChatBot
+# from chatterbot.trainers import ListTrainer,ChatterBotCorpusTrainer
 
-bot =ChatBot('boostcommunity',readonly=False,logic_adapters=[
-    {
-        'import_path':'chatterbot.logic.BestMatch',
-        'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
-        'maximum_similarity_threshold':0.95
-    }
-    ])
+# bot =ChatBot('boostcommunity',readonly=False,logic_adapters=[
+#     {
+#         'import_path':'chatterbot.logic.BestMatch',
+#         'default_response':'Sorry, I do not know what that mean ,or not authorized to reply that :(',
+#         'maximum_similarity_threshold':0.95
+#     }
+#     ])
 # ChatterBotCorpusTrainer = ChatterBotCorpusTrainer(bot)
 # ChatterBotCorpusTrainer.train('chatterbot.corpus.english')
 
-trainer = ListTrainer(bot)
-trainer.train(conversation)
+# trainer = ListTrainer(bot)
+# trainer.train(conversation)
 # Create your views here.
 
 
@@ -544,9 +544,9 @@ def ai_assistant(request):
     return render(request,'pages/ai-assistant.html',context)
 
 
-@login_required
-def getResponse(request):
-    userMessage = request.GET.get('userMessage')
-    chatResponse = str(bot.get_response(userMessage))
-    print(chatResponse)
-    return HttpResponse(chatResponse)
+# @login_required
+# # def getResponse(request):
+# #     userMessage = request.GET.get('userMessage')
+# #     # chatResponse = str(bot.get_response(userMessage))
+# #     print(chatResponse)
+# #     return HttpResponse(chatResponse)
