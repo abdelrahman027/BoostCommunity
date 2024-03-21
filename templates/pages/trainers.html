@@ -87,7 +87,7 @@ Trainers|Page
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                        {{trainer.FirstName}} {{trainer.LastName}}
+                                        {{trainer.FirstName|title}} {{trainer.LastName|title}}
                                     </td>
                                     <td>{{trainer.Qualifications}}</td>
                                     <td>{{trainer.Certificates}}</td>
@@ -140,7 +140,7 @@ Trainers|Page
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                        {{trainer.FirstName}} {{trainer.LastName}}
+                                        {{trainer.FirstName|title}} {{trainer.LastName|title}}
                                     </td>
                                     <td>{{trainer.Qualifications}}</td>
                                     <td>{{trainer.Certificates}}</td>
@@ -192,14 +192,12 @@ Trainers|Page
     const sortBtn = document.getElementById('sortBtn')
     console.log(local_search);
 
-    local_search.addEventListener('keyup', (e) =>
-    {
+    local_search.addEventListener('keyup', (e) => {
         trainer__body.innerHTML = ""
         filteredArr = rdata.filter(trainer => (trainer['FirstName'] + trainer['LastName']).includes(e.target.value))
         console.log(filteredArr);
         if (filteredArr.length > 0) {
-            filteredArr.map((item) =>
-            {
+            filteredArr.map((item) => {
                 trainer__body.innerHTML += `<tr class="align-middle">
                                     <th scope="row">${item.TrainerID}</th>
                                     <td class="text-dark">
@@ -231,8 +229,7 @@ Trainers|Page
     trainerName ? nameFilter.style.color = 'green' : 'black'
     trainerPrice ? priceFilter.style.color = 'green' : 'black'
     trainerLocation ? locationFilter.style.color = 'green' : 'black'
-    nameFilter.addEventListener('click', () =>
-    {
+    nameFilter.addEventListener('click', () => {
         nameFilter.style.color = 'green'
         priceFilter.style.color = 'black'
         locationFilter.style.color = 'black'
@@ -240,8 +237,7 @@ Trainers|Page
         trainerPrice = false
         trainerLocation = false
     })
-    priceFilter.addEventListener('click', () =>
-    {
+    priceFilter.addEventListener('click', () => {
         nameFilter.style.color = 'black'
         priceFilter.style.color = 'green'
         locationFilter.style.color = 'black'
@@ -249,8 +245,7 @@ Trainers|Page
         trainerPrice = true
         trainerLocation = false
     })
-    locationFilter.addEventListener('click', () =>
-    {
+    locationFilter.addEventListener('click', () => {
         nameFilter.style.color = 'black'
         priceFilter.style.color = 'black'
         locationFilter.style.color = 'green'
@@ -262,8 +257,7 @@ Trainers|Page
 
 
     //sort filter
-    sortBtn.addEventListener('click', () =>
-    {
+    sortBtn.addEventListener('click', () => {
         trainer__body.innerHTML = ""
         sortAsc = !sortAsc
         //name conditions
@@ -292,14 +286,13 @@ Trainers|Page
 
         }
 
-        rdataSorted.map((item) =>
-        {
+        rdataSorted.map((item) => {
             trainer__body.innerHTML += `<tr class="align-middle">
                                     <th scope="row">${item.TrainerID}</th>
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                            ${item.FirstName} ${item.LastName}
+                                            ${capitalizeWords(item.FirstName)} ${capitalizeWords(item.LastName)}
                                     </td>
                                     <td>${item.Qualifications}</td>
                                     <td>${item.Certificates}</td>
@@ -324,15 +317,21 @@ Trainers|Page
     //end sort filter
 
     const toggle_search = document.getElementById('toggle_search')
-    const search_toggler = () =>
-    {
+    const search_toggler = () => {
         if (local_search.type == 'hidden') {
             local_search.type = 'text'
         } else {
             local_search.type = 'hidden'
         }
     };
+    function capitalizeWords(string) {
+        return string.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
+    };
 
+
+    function capitalizeWords(string) {
+        return string.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
+    };
 </script>
 
 {% endblock content %}

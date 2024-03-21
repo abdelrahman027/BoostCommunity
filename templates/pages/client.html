@@ -188,7 +188,7 @@ Clients|Page
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                        ${client.FirstName} ${client.LastName}
+                                        ${client.FirstName|title} ${client.LastName|title}
                                     </td>
                                     <td>${client.Project}</td>
                                     <td>${client.Company}</td>
@@ -271,7 +271,7 @@ Clients|Page
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                        ${client.FirstName} ${client.LastName}
+                                        ${client.FirstName|title} ${client.LastName|title}
                                     </td>
                                     <td>${client.Project}</td>
                                     <td>${client.Company}</td>

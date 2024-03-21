@@ -87,7 +87,7 @@ Employees|Page
                                     <th scope="row">{{emp.EmployeeID}}</th>
                                     <td class="text-dark d-flex align-items-center">
                                         <div class="image_container  offline">
-                                            <img src="{{emp.EmployeePhoto.url}}" class="employee_image"
+                                            <img src="{{emp.EmployeePhoto.url}}" class="employee_image rounded-circle"
                                                 alt="Employee image">
                                         </div>
                                         <span class="ms-1">{{emp.FirstName|title}}</span>
@@ -99,7 +99,7 @@ Employees|Page
                                     <td class="price">{{emp.PerHour}}</td>
                                     <td>
                                         <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon"
-                                            class="employee_image">
+                                            class="employee_image rounded-circle">
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -133,7 +133,7 @@ Employees|Page
                                     <th scope="row">{{emp.EmployeeID}}</th>
                                     <td class="text-dark d-flex align-items-center">
                                         <div class="image_container  offline">
-                                            <img src="{{emp.EmployeePhoto.url}}" class="employee_image"
+                                            <img src="{{emp.EmployeePhoto.url}}" class="employee_image rounded-circle"
                                                 alt="Employee image">
                                         </div>
                                         <span class="ms-1">{{emp.FirstName|title}}</span>
@@ -145,7 +145,7 @@ Employees|Page
                                     <td class="price">{{emp.PerHour}}</td>
                                     <td>
                                         <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon"
-                                            class="employee_image">
+                                            class="employee_image rounded-circle">
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -195,7 +195,7 @@ Employees|Page
                                     <th scope="row">${emp.EmployeeID}</th>
                                     <td class="text-dark d-flex align-items-center">
                                         <div class="image_container  offline">
-                                            <img src="/media/${emp.EmployeePhoto}" class="employee_image"
+                                            <img src="/media/${emp.EmployeePhoto}" class="employee_image rounded-circle"
                                                 alt="Employee image">
                                         </div>
                                         <span class="ms-1">${emp.FirstName}</span>
@@ -207,7 +207,7 @@ Employees|Page
                                     <td class="price">${emp.PerHour}</td>
                                     <td>
                                         <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon"
-                                            class="employee_image">
+                                            class="employee_image rounded-circle">
                                     </td>
                                 </tr>`
             })
@@ -286,7 +286,7 @@ Employees|Page
                                     <th scope="row">${emp.EmployeeID}</th>
                                     <td class="text-dark d-flex align-items-center">
                                         <div class="image_container  offline">
-                                            <img src="/media/${emp.EmployeePhoto}" class="employee_image"
+                                            <img src="/media/${emp.EmployeePhoto}" class="employee_image rounded-circle"
                                                 alt="Employee image">
                                         </div>
                                         <span class="ms-1">${emp.FirstName}</span>
@@ -298,7 +298,7 @@ Employees|Page
                                     <td class="price">${emp.PerHour}</td>
                                     <td>
                                         <img src="{% static 'front-end-static/images/icons/dots.svg' %}" alt="icon"
-                                            class="employee_image">
+                                            class="employee_image rounded-circle">
                                     </td>
                                 </tr>`
         })
