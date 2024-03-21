@@ -127,10 +127,15 @@ class Trainer(models.Model):
     FirstName = models.CharField(max_length=255)
     LastName = models.CharField(max_length=255)
     Phone = models.CharField(max_length=20)
-    Qualifications = models.TextField()
-    Certificates = models.TextField()
-    Location = models.TextField(default='EGY')
-    Price = models.IntegerField(default=50)
+    email = models.CharField(max_length=50 ,default="example@email.com")
+    Qualifications = models.TextField(null=True,blank=True)
+    Certificates = models.FileField(null=True,blank=True,upload_to='pdf')
+    Certificate2 = models.FileField(null=True,blank=True,upload_to='pdf')
+    Certificate3 = models.FileField(null=True,blank=True,upload_to='pdf')
+    Location = models.TextField(default='EGY',max_length=20)
+    Comments = models.TextField(null=True,blank=True)
+
+    PricePerHour = models.IntegerField(default=50)
 
     def __str__(self):
         return self.FirstName
