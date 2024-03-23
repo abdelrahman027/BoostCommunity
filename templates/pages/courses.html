@@ -168,6 +168,13 @@ Courses|Page
     let rdataSorted;
     //sort function
 
+
+    //cap regex
+    function capitalizeWords(string)
+    {
+        return string.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
+    };
+    //model
     let sortAsc = false;
     let courseName = true;
     let coursePrice = false;
@@ -199,7 +206,7 @@ Courses|Page
                                     <th scope="row">${item.CourseID}</th>
                                     <td>FNBN 00${item.CourseID}</td>
                                     <td class="text-dark">${item.CourseName}</td>
-                                    <td>${item.InstructorName|title}</td>
+                                    <td>${item.InstructorName | title}</td>
                                     <td class="price">${item.Price}</td>
                                     <td>${item.StartDate}</td>
                                     <td>${item.Duration}</td>
@@ -281,8 +288,8 @@ Courses|Page
             course__body.innerHTML += `<tr class="align-middle">
                                     <th scope="row">${item.CourseID}</th>
                                     <td>FNBN 00${item.CourseID}</td>
-                                    <td class="text-dark">${item.CourseName}</td>
-                                    <td>${item.InstructorName|title}</td>
+                                    <td class="text-dark">${capitalizeWords(item.CourseName)}</td>
+                                    <td>${item.InstructorName}</td>
                                     <td class="price">${item.Price}</td>
                                     <td>${item.StartDate}</td>
                                     <td>${item.Duration}</td>

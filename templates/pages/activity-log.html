@@ -75,7 +75,7 @@ Employees|Page
                                     <th scope="row">{{activity.ActivityID}}</th>
                                     <td>{{activity.ActivityName}}</td>
                                     <td class="text-dark">{{activity.Employee.FirstName|title}}</td>
-                                    <td>{{activity.DoneDate}}</td>
+                                    <td>{{activity.DoneDate|date:"M d, Y"}}</td>
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn" type="button" data-bs-toggle="dropdown"
@@ -120,7 +120,7 @@ Employees|Page
 <script>
     let data = "{{activity_json}}"
     const rdata = JSON.parse(data.replace(/&quot;/g, '"'))
-    console.log(rdata); //DATA@@@@
+    console.log(rdata[0]); //DATA@@@@
 
     let sortAsc = false;
     let employeeName = true;
@@ -145,49 +145,51 @@ Employees|Page
         //name conditions
         if (sortAsc && employeeName) {
 
-            rdataSorted = rdata.sort((a, b) => a.FirstName.toLowerCase().localeCompare(b.FirstName.toLowerCase())
+            rdataSorted = rdata.sort((a, b) => a.ActivityName.toLowerCase().localeCompare(b.ActivityName.toLowerCase())
             );
         } else if (!sortAsc && employeeName) {
 
-            rdataSorted = rdata.sort((a, b) => b.FirstName.toLowerCase().localeCompare(a.FirstName.toLowerCase()));
+            rdataSorted = rdata.sort((a, b) => b.ActivityName.toLowerCase().localeCompare(a.ActivityName.toLowerCase()));
         }
         //price conditions
 
-        // rdataSorted.map((item) => {
-        //     course__body.innerHTML += ` <tr class="align-middle">
-        //                             <th scope="row">{{activity.ActivityID}}</th>
-        //                             <td>{{activity.ActivityName}}</td>
-        //                             <td class="text-dark">{{activity.Employee.FirstName|title}}</td>
-        //                             <td>{{activity.DoneDate}}</td>
-        //                             <td>
-        //                                 <div class="dropdown">
-        //                                     <button class="btn" type="button" data-bs-toggle="dropdown"
-        //                                         aria-expanded="false">
-        //                                         <img src="{% static 'front-end-static/images/icons/dots.svg' %}"
-        //                                             alt="icon">
-        //                                     </button>
-        //                                     <ul class="dropdown-menu" style="transition: none;">
-        //                                         <li><a class="dropdown-item"
-        //                                                 href=" {% url 'my-activity' %}/detail/{{activity.ActivityID}}">View
-        //                                                 Activity
-        //                                             </a>
-        //                                         </li>
-        //                                         <li><a class="dropdown-item" style="color: green;"
-        //                                                 href=" {% url 'add-activity' %}/{{activity.ActivityID}}">Edit
-        //                                                 Activity
-        //                                             </a>
-        //                                         </li>
-        //                                         <li><a class="dropdown-item" style="color: red;"
-        //                                                 href=" {% url 'my-activity' %}/{{activity.ActivityID}}">Delete
-        //                                                 Activity
-        //                                             </a>
-        //                                         </li>
-        //                                     </ul>
-        //                                 </div>
+        rdataSorted.map((activity) =>
+        {
 
-        //                             </td>
-        //                         </tr>`
-        // })
+            course__body.innerHTML += ` <tr class="align-middle">
+                                    <th scope="row">${activity.ActivityID}</th>
+                                    <td>${activity.ActivityName}</td>
+                                    <td class="text-dark">employee</td>
+                                    <td>${new Date(activity.DoneDate).toLocaleDateString("en-US")}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <button class="btn" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <img src="{% static 'front-end-static/images/icons/dots.svg' %}"
+                                                    alt="icon">
+                                            </button>
+                                            <ul class="dropdown-menu" style="transition: none;">
+                                                <li><a class="dropdown-item"
+                                                        href=" {% url 'my-activity' %}/detail/{{activity.ActivityID}}">View
+                                                        Activity
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" style="color: green;"
+                                                        href=" {% url 'add-activity' %}/{{activity.ActivityID}}">Edit
+                                                        Activity
+                                                    </a>
+                                                </li>
+                                                <li><a class="dropdown-item" style="color: red;"
+                                                        href=" {% url 'my-activity' %}/{{activity.ActivityID}}">Delete
+                                                        Activity
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                    </td>
+                                </tr>`
+        })
     })
 
     // const data = '{{client_json}}'

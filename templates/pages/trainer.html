@@ -299,7 +299,7 @@ Trainers|Page
                                     <td class="text-dark">
                                         <img src="{% static 'front-end-static/images/instructor.jpg' %}"
                                             class="trainer_image" alt="trainer image">
-                                            ${item.FirstName} ${item.LastName}
+                                            ${item.FirstName.capitalize()} ${item.LastName.capitalize()}
                                     </td>
                                     <td>${item.Qualifications}</td>
                                     <td>${item.Certificates}</td>
